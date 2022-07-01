@@ -7,6 +7,7 @@ import (
 	"vkbot/commands/online"
 	"vkbot/commands/ping"
 	"vkbot/commands/top"
+	"vkbot/commands/who"
 	"vkbot/core"
 )
 
@@ -18,5 +19,6 @@ func commandPool() core.PoolType {
 		help.Register(),
 		linus.Register(),
 		top.Register(),
+		who.Register(),
 	}
 }
