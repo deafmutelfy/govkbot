@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"log"
+	"math/rand"
 	"net/http"
 	"strings"
+	"time"
 	"vkbot/core"
 
 	"github.com/SevereCloud/vksdk/v2/api"
@@ -14,6 +16,8 @@ import (
 )
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	s := core.GetStorage()
 	s.Cfg = core.Config{}
 
