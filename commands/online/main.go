@@ -39,6 +39,10 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	txt := "список участников, находящихся в сети:\n"
 
 	for _, x := range m.Profiles {
+		if !x.Online {
+			continue
+		}
+
 		txt += "[id" + strconv.Itoa(x.ID) + "|" + x.FirstName + " " + x.LastName + "]\n"
 	}
 
