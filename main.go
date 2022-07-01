@@ -22,7 +22,6 @@ func main() {
 	s.Cfg = core.Config{}
 
 	s.Cfg.Load("config.yaml")
-
 	s.Vk = api.NewVK(s.Cfg.Token)
 
 	opt, err := redis.ParseURL(s.Cfg.RedisUrl)

@@ -1,0 +1,4 @@
+token: <vk token>
+confirmation_key: <vk confirmation key>
+port: <callback server port>
+redis_url: <redis server url>
