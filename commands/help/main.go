@@ -9,6 +9,8 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
+const repo_url = "https://github.com/deafmutelfy/govkbot"
+
 var msg string = "список команд:\n"
 var once sync.Once
 
@@ -31,6 +33,8 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 			msg += strings.Join(aliases, ", ") + " - " + x.Description + "\n"
 		}
+
+		msg += "\nИсходный код: " + repo_url
 	})
 
 	core.ReplySimple(obj, msg)
