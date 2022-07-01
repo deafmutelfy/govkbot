@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"vkbot/core"
 
@@ -15,7 +14,6 @@ import (
 )
 
 func main() {
-	log.Println(os.Environ())
 	s := core.GetStorage()
 	s.Cfg = core.Config{}
 
@@ -37,6 +35,7 @@ func main() {
 	cb.ConfirmationKey = s.Cfg.ConfirmationKey
 
 	cmds := commandPool()
+	s.CommandPool = &cmds
 
 	cb.MessageNew(func(ctx context.Context, obj events.MessageNewObject) {
 		tokens := strings.Split(obj.Message.Text, " ")

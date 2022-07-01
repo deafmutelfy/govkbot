@@ -13,10 +13,11 @@ var once sync.Once
 var storageInstance *Storage = nil
 
 type Storage struct {
-	Cfg Config
-	Vk  *api.VK
-	Db  *redis.Client
-	Ctx context.Context
+	Cfg         Config
+	Vk          *api.VK
+	Db          *redis.Client
+	Ctx         context.Context
+	CommandPool *PoolType
 }
 
 func GetStorage() *Storage {

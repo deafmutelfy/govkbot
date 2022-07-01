@@ -1,4 +1,4 @@
-token: 1ba36e7148ac501aebcc9e0eb35b1cc5a58d04e88b02a251939947d5016acd8645653c1aa11b9e3f9e2df
-confirmation_key: 70954385
+token: a53eff98ea99003ed94485b64b8edd98818fc079ac9ef21b3f7a722b1b2af7d64269778a7fbf25fc0fad1
+confirmation_key: 9898ab4f
 port: 8080
 redis_url: redis://127.0.0.1
