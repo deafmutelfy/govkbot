@@ -65,7 +65,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	mw1 := imagick.NewMagickWand()
 	mw1.ReadImageBlob(bt)
-	mw1.ResizeImage(435, 275, imagick.FILTER_UNDEFINED)
+	mw1.ResizeImage(435, 275, imagick.FILTER_UNDEFINED, 0)
 	mw1.SetImageVirtualPixelMethod(imagick.VIRTUAL_PIXEL_TRANSPARENT)
 	mw1.DistortImage(imagick.DISTORTION_PERSPECTIVE, mask, false)
 
