@@ -21,9 +21,7 @@ func main() {
 	s := core.GetStorage()
 	s.Cfg = core.Config{}
 
-	if err := s.Cfg.Load("config.yaml"); err != nil {
-		log.Fatalln(err)
-	}
+	s.Cfg.Load("config.yaml")
 
 	s.Vk = api.NewVK(s.Cfg.Token)
 
