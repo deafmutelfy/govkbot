@@ -51,5 +51,5 @@ func main() {
 	})
 
 	http.HandleFunc("/callback", cb.HandleFunc)
-	http.ListenAndServe(s.Cfg.Host, nil)
+	http.ListenAndServe("0.0.0.0:"+s.Cfg.Port, nil)
 }

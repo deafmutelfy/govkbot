@@ -5,7 +5,7 @@ import "github.com/ilyakaznacheev/cleanenv"
 type Config struct {
 	Token           string `yaml:"token" env:"TOKEN"`
 	ConfirmationKey string `yaml:"confirmation_key" env:"CONFIRMATION_KEY"`
-	Host            string `yaml:"host" env:"HOST"`
+	Port            string `yaml:"port" env:"PORT"`
 }
 
 func (s *Config) Load(filename string) error {
