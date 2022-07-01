@@ -43,7 +43,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 			continue
 		}
 
-		name := core.GetNicknameWithoutSetup(obj.Message.FromID)
+		name := core.GetNicknameWithoutSetup(x.ID)
 		if name == "" {
 			name = x.FirstName + " " + x.LastName
 		}
