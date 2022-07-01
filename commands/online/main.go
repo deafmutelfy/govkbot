@@ -43,7 +43,12 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 			continue
 		}
 
-		txt += "[id" + strconv.Itoa(x.ID) + "|" + x.FirstName + " " + x.LastName + "]\n"
+		name := core.GetNicknameWithoutSetup(obj.Message.FromID)
+		if name == "" {
+			name = x.FirstName + " " + x.LastName
+		}
+
+		txt += "[id" + strconv.Itoa(x.ID) + "|" + name + "]\n"
 	}
 
 	core.ReplySimple(obj, txt)

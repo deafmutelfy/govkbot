@@ -22,6 +22,19 @@ func ReplySimple(obj *events.MessageNewObject, msg string) error {
 	return err
 }
 
+func GetNicknameWithoutSetup(userId int) string {
+	s := GetStorage()
+	key := fmt.Sprintf("nicknames.%d", userId)
+
+	nickname, err := s.Db.Get(s.Ctx, key).Result()
+
+	if err != nil {
+		nickname = ""
+	}
+
+	return nickname
+}
+
 func GetNickname(userId int) string {
 	s := GetStorage()
 	key := fmt.Sprintf("nicknames.%d", userId)
