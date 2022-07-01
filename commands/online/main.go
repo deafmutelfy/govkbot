@@ -48,7 +48,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 			name = x.FirstName + " " + x.LastName
 		}
 
-		txt += "[id" + strconv.Itoa(x.ID) + "|" + name + "]\n"
+		txt += "- [id" + strconv.Itoa(x.ID) + "|" + name + "]\n"
 	}
 
 	core.ReplySimple(obj, txt)
