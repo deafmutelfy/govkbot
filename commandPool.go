@@ -2,6 +2,7 @@ package main
 
 import (
 	"vkbot/commands/help"
+	"vkbot/commands/linus"
 	"vkbot/commands/nick"
 	"vkbot/commands/online"
 	"vkbot/commands/ping"
@@ -14,5 +15,6 @@ func commandPool() core.PoolType {
 		nick.Register(),
 		online.Register(),
 		help.Register(),
+		linus.Register(),
 	}
 }
