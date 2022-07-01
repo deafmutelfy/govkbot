@@ -6,6 +6,7 @@ type Config struct {
 	Token           string `yaml:"token" env:"TOKEN"`
 	ConfirmationKey string `yaml:"confirmation_key" env:"CONFIRMATION_KEY"`
 	Port            string `yaml:"port" env:"PORT"`
+	RedisUrl        string `yaml:"redis_url" env:"REDIS_URL"`
 }
 
 func (s *Config) Load(filename string) error {

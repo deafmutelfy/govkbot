@@ -4,15 +4,18 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"vkbot/core"
 
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/callback"
 	"github.com/SevereCloud/vksdk/v2/events"
+	"github.com/go-redis/redis/v9"
 )
 
 func main() {
+	log.Println(os.Environ())
 	s := core.GetStorage()
 	s.Cfg = core.Config{}
 
@@ -21,6 +24,14 @@ func main() {
 	}
 
 	s.Vk = api.NewVK(s.Cfg.Token)
+
+	opt, err := redis.ParseURL(s.Cfg.RedisUrl)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	s.Db = redis.NewClient(opt)
+	s.Ctx = context.Background()
 
 	cb := callback.NewCallback()
 	cb.ConfirmationKey = s.Cfg.ConfirmationKey

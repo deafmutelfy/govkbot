@@ -16,5 +16,5 @@ func Register() core.Command {
 }
 
 func handle(ctx *context.Context, obj *events.MessageNewObject) {
-	core.SendSimple(obj.Message.PeerID, "Понг")
+	core.ReplySimple(obj, "понг")
 }
