@@ -16,7 +16,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	gopkg.in/gographics/imagick.v3 v3.4.1 // indirect
+	gopkg.in/gographics/imagick.v2 v2.6.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
 )

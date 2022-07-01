@@ -10,7 +10,7 @@ import (
 
 	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
-	"gopkg.in/gographics/imagick.v3/imagick"
+	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
 const error_image_not_attached = "ошибка: нужно прикрепить картинку"
