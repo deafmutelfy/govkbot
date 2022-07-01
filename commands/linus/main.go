@@ -65,13 +65,13 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	mw1 := imagick.NewMagickWand()
 	mw1.ReadImageBlob(bt)
-	mw1.ResizeImage(435, 275, imagick.FILTER_UNDEFINED, 0)
+	mw1.ResizeImage(435, 275, imagick.FILTER_UNDEFINED, 1)
 	mw1.SetImageVirtualPixelMethod(imagick.VIRTUAL_PIXEL_TRANSPARENT)
 	mw1.DistortImage(imagick.DISTORTION_PERSPECTIVE, mask, false)
 
 	mw2 := imagick.NewMagickWand()
 	mw2.ReadImage(linus_file_path)
-	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 205, 1)
+	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 205, 0)
 
 	s := core.GetStorage()
 
