@@ -71,7 +71,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	mw2 := imagick.NewMagickWand()
 	mw2.ReadImage(linus_file_path)
-	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 205, 0)
+	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 205, 1)
 
 	s := core.GetStorage()
 
