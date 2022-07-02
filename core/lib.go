@@ -9,7 +9,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func ReplySimple(obj *events.MessageNewObject, msg string) error {
+func ReplySimple(obj *events.MessageNewObject, msg string, attachment ...interface{}) error {
 	b := params.NewMessagesSendBuilder()
 	fromId := obj.Message.FromID
 
@@ -17,6 +17,10 @@ func ReplySimple(obj *events.MessageNewObject, msg string) error {
 	b.DisableMentions(true)
 	b.RandomID(0)
 	b.PeerID(obj.Message.PeerID)
+
+	if len(attachment) != 0 {
+		b.Attachment(attachment[0])
+	}
 
 	_, err := GetStorage().Vk.MessagesSend(b.Params)
 	return err

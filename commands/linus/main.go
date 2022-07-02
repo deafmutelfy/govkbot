@@ -5,10 +5,8 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"strconv"
 	"vkbot/core"
 
-	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
@@ -73,9 +71,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw2.ReadImage(linus_file_path)
 	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 205, 0)
 
-	s := core.GetStorage()
-
-	vkPhoto, err := s.Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw2.GetImageBlob()))
+	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw2.GetImageBlob()))
 
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
@@ -83,14 +79,5 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	b := params.NewMessagesSendBuilder()
-	fromId := obj.Message.FromID
-
-	b.Message("[id" + strconv.Itoa(fromId) + "|" + core.GetNickname(fromId) + "], ваша картинка:")
-	b.DisableMentions(true)
-	b.RandomID(0)
-	b.PeerID(obj.Message.PeerID)
-	b.Attachment(vkPhoto)
-
-	s.Vk.MessagesSend(b.Params)
+	core.ReplySimple(obj, "ваша картинка:", vkPhoto)
 }

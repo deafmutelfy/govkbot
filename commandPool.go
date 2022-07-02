@@ -6,6 +6,7 @@ import (
 	"vkbot/commands/nick"
 	"vkbot/commands/online"
 	"vkbot/commands/ping"
+	"vkbot/commands/rule34"
 	"vkbot/commands/top"
 	"vkbot/commands/tts"
 	"vkbot/commands/who"
@@ -22,5 +23,6 @@ func commandPool() core.PoolType {
 		top.Register(),
 		who.Register(),
 		tts.Register(),
+		rule34.Register(),
 	}
 }

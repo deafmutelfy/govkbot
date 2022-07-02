@@ -9,7 +9,6 @@ import (
 	"strings"
 	"vkbot/core"
 
-	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
@@ -70,9 +69,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	s := core.GetStorage()
-
-	m, err := s.Vk.UploadMessagesDoc(obj.Message.PeerID, "audio_message", "gs.wav", "", data)
+	m, err := core.GetStorage().Vk.UploadMessagesDoc(obj.Message.PeerID, "audio_message", "gs.wav", "", data)
 
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
@@ -80,14 +77,5 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	b := params.NewMessagesSendBuilder()
-	fromId := obj.Message.FromID
-
-	b.Message("[id" + strconv.Itoa(fromId) + "|" + core.GetNickname(fromId) + "], ваша озвучка:")
-	b.DisableMentions(true)
-	b.RandomID(0)
-	b.PeerID(obj.Message.PeerID)
-	b.Attachment(m.AudioMessage)
-
-	s.Vk.MessagesSend(b.Params)
+	core.ReplySimple(obj, "ваша озвучка:", m.AudioMessage)
 }
