@@ -2,15 +2,12 @@ package rule34
 
 import (
 	"context"
-	"io"
 	"math/rand"
 	"net/http"
-	"net/url"
-	"strings"
 	"vkbot/core"
 
 	"github.com/SevereCloud/vksdk/v2/events"
-	"github.com/valyala/fastjson"
+	gonnachan "github.com/insomnyawolf/Gonnachan"
 )
 
 func Register() core.Command {
@@ -22,45 +19,23 @@ func Register() core.Command {
 }
 
 func handle(ctx *context.Context, obj *events.MessageNewObject) {
-	tags := strings.Join(strings.Split(obj.Message.Text, " ")[1:], "+")
+	tags := core.ExtractArguments(obj)
 
-	if tags == "" {
+	if len(tags) == 0 {
 		core.ReplySimple(obj, "ошибка: теги не указаны")
 	}
 
-	q := url.Values{}
-	q.Set("tags", tags)
-	q.Set("limit", "64")
+	req := gonnachan.PostRequest{Tags: []string{"valorant"}, MaxResults: 64, TargetAPI: gonnachan.ServerRule34}
 
-	u := &url.URL{
-		Scheme:   "https",
-		Host:     "r34-json-api.herokuapp.com",
-		Path:     "posts",
-		RawQuery: q.Encode(),
-	}
+	r, err := req.GetResults()
 
-	response, err := http.Get(u.String())
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
 
 		return
 	}
 
-	bt, err := io.ReadAll(response.Body)
-	if err != nil {
-		core.ReplySimple(obj, core.ERR_UNKNOWN)
-
-		return
-	}
-
-	v, err := fastjson.ParseBytes(bt)
-	if err != nil {
-		core.ReplySimple(obj, core.ERR_UNKNOWN)
-
-		return
-	}
-
-	l := len(v.GetArray())
+	l := len(r)
 
 	if l == 0 {
 		core.ReplySimple(obj, "ошибка: ничего не найдено")
@@ -68,9 +43,9 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	post := v.GetArray()[rand.Intn(l)]
+	post := r[rand.Intn(l)]
 
-	pic, err := http.Get(string(post.GetStringBytes("file_url")))
+	pic, err := http.Get(post.FileURL)
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
 
