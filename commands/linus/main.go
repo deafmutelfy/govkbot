@@ -26,13 +26,15 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 
-	if len(obj.Message.Attachments) == 0 {
+	atts := core.ExtractAttachments(obj)
+
+	if len(atts) == 0 {
 		core.ReplySimple(obj, error_image_not_attached)
 
 		return
 	}
 
-	attachment := obj.Message.Attachments[0]
+	attachment := atts[0]
 	if attachment.Type != "photo" {
 		core.ReplySimple(obj, error_image_not_attached)
 

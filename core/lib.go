@@ -7,6 +7,7 @@ import (
 
 	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
+	"github.com/SevereCloud/vksdk/v2/object"
 )
 
 func ReplySimple(obj *events.MessageNewObject, msg string, attachment ...interface{}) error {
@@ -66,4 +67,18 @@ func GetNickname(userId int) string {
 
 func ExtractArguments(obj *events.MessageNewObject) []string {
 	return strings.Split(obj.Message.Text, " ")[1:]
+}
+
+func ExtractAttachments(obj *events.MessageNewObject) []object.MessagesMessageAttachment {
+	res := obj.Message.Attachments
+
+	if obj.Message.ReplyMessage != nil {
+		res = append(res, obj.Message.ReplyMessage.Attachments...)
+	}
+
+	for _, x := range obj.Message.FwdMessages {
+		res = append(res, x.Attachments...)
+	}
+
+	return res
 }
