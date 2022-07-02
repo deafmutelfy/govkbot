@@ -3,6 +3,7 @@ package main
 import (
 	"vkbot/commands/curse"
 	"vkbot/commands/help"
+	"vkbot/commands/initrole"
 	"vkbot/commands/linus"
 	"vkbot/commands/nick"
 	"vkbot/commands/online"
@@ -26,5 +27,6 @@ func commandPool() core.PoolType {
 		tts.Register(),
 		rule34.Register(),
 		curse.Register(),
+		initrole.Register(),
 	}
 }
