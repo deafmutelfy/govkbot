@@ -60,7 +60,15 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	post := v.GetArray()[rand.Intn(len(v.GetArray()))]
+	l := len(v.GetArray())
+
+	if l == 0 {
+		core.ReplySimple(obj, "ошибка: ничего не найдено")
+
+		return
+	}
+
+	post := v.GetArray()[rand.Intn(l)]
 
 	pic, err := http.Get(string(post.GetStringBytes("file_url")))
 	if err != nil {
