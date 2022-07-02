@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"unicode/utf8"
 	"vkbot/core"
 
 	"github.com/SevereCloud/vksdk/v2/events"
@@ -26,7 +27,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 	nickname = strings.ReplaceAll(nickname, "\n", "")
-	if len(nickname) > 32 {
+	if utf8.RuneCountInString(nickname) > 32 {
 		core.ReplySimple(obj, "ошибка: максимальная длина никнейма - 32 символа")
 
 		return
