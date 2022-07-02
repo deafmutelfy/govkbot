@@ -18,6 +18,7 @@ func ReplySimple(obj *events.MessageNewObject, msg string, attachment ...interfa
 	b.DisableMentions(true)
 	b.RandomID(0)
 	b.PeerID(obj.Message.PeerID)
+	b.DontParseLinks(true)
 
 	if len(attachment) != 0 {
 		b.Attachment(attachment[0])
