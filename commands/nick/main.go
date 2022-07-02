@@ -25,6 +25,12 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 		return
 	}
+	nickname = strings.ReplaceAll(nickname, "\n", "")
+	if len(nickname) > 32 {
+		core.ReplySimple(obj, "ошибка: максимальная длина никнейма - 32 символа")
+
+		return
+	}
 
 	s := core.GetStorage()
 
