@@ -25,7 +25,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		core.ReplySimple(obj, "ошибка: теги не указаны")
 	}
 
-	req := gonnachan.PostRequest{Tags: []string{"valorant"}, MaxResults: 64, TargetAPI: gonnachan.ServerRule34}
+	req := gonnachan.PostRequest{Tags: tags, MaxResults: 64, TargetAPI: gonnachan.ServerRule34}
 
 	r, err := req.GetResults()
 
