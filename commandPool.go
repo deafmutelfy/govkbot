@@ -1,6 +1,7 @@
 package main
 
 import (
+	"vkbot/commands/curse"
 	"vkbot/commands/help"
 	"vkbot/commands/linus"
 	"vkbot/commands/nick"
@@ -24,5 +25,6 @@ func commandPool() core.PoolType {
 		who.Register(),
 		tts.Register(),
 		rule34.Register(),
+		curse.Register(),
 	}
 }
