@@ -30,7 +30,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	q := url.Values{}
 	q.Set("tags", tags)
-	q.Set("limit", "200")
+	q.Set("limit", "64")
 
 	u := &url.URL{
 		Scheme:   "https",
