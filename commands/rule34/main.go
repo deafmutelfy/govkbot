@@ -29,15 +29,9 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	r, err := req.GetResults()
 
-	if err != nil {
-		core.ReplySimple(obj, core.ERR_UNKNOWN)
-
-		return
-	}
-
 	l := len(r)
 
-	if l == 0 {
+	if l == 0 || err != nil {
 		core.ReplySimple(obj, "ошибка: ничего не найдено")
 
 		return
