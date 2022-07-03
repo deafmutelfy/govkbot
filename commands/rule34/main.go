@@ -15,6 +15,7 @@ func Register() core.Command {
 		Aliases:     []string{"р34", "r34"},
 		Description: "найти материал в Rule 34",
 		Handler:     handle,
+		Hidden:      true,
 	}
 }
 

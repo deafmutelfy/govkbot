@@ -54,7 +54,7 @@ func main() {
 
 		for _, x := range cmds {
 			for _, a := range x.Aliases {
-				if targetcmd == a {
+				if targetcmd == a && !x.Hidden {
 					go x.Handler(&ctx, &obj)
 				}
 			}
