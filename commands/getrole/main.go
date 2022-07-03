@@ -30,6 +30,8 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	role := ""
 
 	switch rolesystem.GetRole(obj) {
+	case rolesystem.ROLE_BOT_OWNER:
+		role = core.GetNicknameWithoutSetup(obj.Message.FromID)
 	case rolesystem.ROLE_OWNER:
 		role = "владелец"
 	case rolesystem.ROLE_ADMINISTRATOR:

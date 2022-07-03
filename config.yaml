@@ -2,3 +2,4 @@ token: vk1.a.k5JiGuNgdRn2ztm825Y24l4aji5wU_V4IfViy4zJNyw8BsSo2QC72b_aGflXyWyKWFU
 confirmation_key: ff7eeb2f
 port: 8080
 redis_url: redis://127.0.0.1
+bot_owner_id: 650141443

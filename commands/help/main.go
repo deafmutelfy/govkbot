@@ -25,6 +25,10 @@ func Register() core.Command {
 func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	once.Do(func() {
 		for _, x := range *core.GetStorage().CommandPool {
+			if x.Hidden {
+				continue
+			}
+
 			aliases := []string{}
 
 			for _, v := range x.Aliases {
