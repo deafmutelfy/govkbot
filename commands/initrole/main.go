@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strconv"
 	"vkbot/core"
+	"vkbot/core/rolesystem"
 
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/api/params"
@@ -66,12 +67,12 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		role := ""
 
 		if x.IsOwner {
-			s.Db.Set(s.Ctx, r, "owner", 0)
+			s.Db.Set(s.Ctx, r, rolesystem.ROLE_OWNER, 0)
 
 			txt += "Основателю беседы "
 			role = "Основатель"
 		} else if x.IsAdmin {
-			s.Db.Set(s.Ctx, r, "moderator", 0)
+			s.Db.Set(s.Ctx, r, rolesystem.ROLE_MODERATOR, 0)
 
 			txt += "Администратору беседы "
 			role = "Модератор"

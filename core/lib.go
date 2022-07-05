@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -88,4 +89,26 @@ func ExtractAttachments(obj *events.MessageNewObject) []object.MessagesMessageAt
 	}
 
 	return res
+}
+
+func GetMention(obj *events.MessageNewObject) int {
+	if obj.Message.ReplyMessage != nil {
+		return obj.Message.ReplyMessage.FromID
+	}
+
+	if len(obj.Message.FwdMessages) > 0 {
+		return obj.Message.FwdMessages[0].FromID
+	}
+
+	r := regexp.MustCompile(`\[id(\d*)\|.*]`)
+
+	res := r.FindStringSubmatch(obj.Message.Text)
+
+	if len(res) == 0 {
+		return 0
+	}
+
+	id, _ := strconv.Atoi(res[1])
+
+	return id
 }

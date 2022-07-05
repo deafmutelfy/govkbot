@@ -5,6 +5,7 @@ import (
 	"vkbot/commands/getrole"
 	"vkbot/commands/help"
 	"vkbot/commands/initrole"
+	"vkbot/commands/kick"
 	"vkbot/commands/linus"
 	"vkbot/commands/nick"
 	"vkbot/commands/online"
@@ -30,5 +31,6 @@ func commandPool() core.PoolType {
 		curse.Register(),
 		initrole.Register(),
 		getrole.Register(),
+		kick.Register(),
 	}
 }

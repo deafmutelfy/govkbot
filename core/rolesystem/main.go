@@ -8,7 +8,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func GetRole(obj *events.MessageNewObject) string {
+func GetRole(obj *events.MessageNewObject) int {
 	s := core.GetStorage()
 
 	if strconv.Itoa(obj.Message.FromID) == s.Cfg.BotOwnerId {
@@ -16,6 +16,7 @@ func GetRole(obj *events.MessageNewObject) string {
 	}
 
 	role, _ := s.Db.Get(s.Ctx, fmt.Sprintf("roles.%d.%d", obj.Message.PeerID, obj.Message.FromID)).Result()
+	rint, _ := strconv.Atoi(role)
 
-	return role
+	return rint
 }
