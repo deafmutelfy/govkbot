@@ -77,7 +77,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 			role = "Модератор"
 		}
 
-		name := core.GetNicknameWithoutSetup(x.MemberID)
+		name := core.GetAlias(x.MemberID)
 		if name == "" {
 			for _, v := range m.Profiles {
 				if v.ID == x.MemberID {

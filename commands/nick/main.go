@@ -35,7 +35,10 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	s := core.GetStorage()
 
-	s.Db.Set(s.Ctx, fmt.Sprintf("nicknames.%d", obj.Message.FromID), nickname, 0)
+	key := fmt.Sprintf("nicknames.%d", obj.Message.FromID)
+
+	s.Db.Set(s.Ctx, key, nickname, 0)
+	s.Db.Set(s.Ctx, key+".initialized", "true", 0)
 
 	core.ReplySimple(obj, "успешно")
 }

@@ -48,7 +48,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	u := m.Profiles[rand.Intn(len(m.Profiles))]
 
-	name := core.GetNicknameWithoutSetup(u.ID)
+	name := core.GetAlias(u.ID)
 	if name == "" {
 		name = u.FirstName + " " + u.LastName
 	}

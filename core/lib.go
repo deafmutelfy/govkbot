@@ -28,11 +28,17 @@ func ReplySimple(obj *events.MessageNewObject, msg string, attachment ...interfa
 	return err
 }
 
-func GetNicknameWithoutSetup(userId int) string {
+func GetAlias(userId int) string {
 	s := GetStorage()
 	key := fmt.Sprintf("nicknames.%d", userId)
 
 	nickname, err := s.Db.Get(s.Ctx, key).Result()
+
+	if err != nil {
+		nickname = ""
+	}
+
+	_, err = s.Db.Get(s.Ctx, key+".initialized").Result()
 
 	if err != nil {
 		nickname = ""
