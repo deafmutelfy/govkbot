@@ -112,3 +112,7 @@ func GetMention(obj *events.MessageNewObject) int {
 
 	return id
 }
+
+func PeerIdToChatId(obj *events.MessageNewObject) int {
+	return obj.Message.PeerID - 2000000000
+}
