@@ -17,7 +17,7 @@ type Storage struct {
 	Vk          *api.VK
 	Db          *redis.Client
 	Ctx         context.Context
-	CommandPool *PoolType
+	CommandPool *[]Command
 }
 
 func GetStorage() *Storage {

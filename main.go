@@ -55,7 +55,29 @@ func main() {
 		for _, x := range cmds {
 			for _, a := range x.Aliases {
 				if targetcmd == a && !x.Hidden {
-					go x.Handler(&ctx, &obj)
+					if !x.Metacommand {
+						go x.Handler(&ctx, &obj)
+					} else {
+						if len(tokens) < 2 {
+							core.ReplySimple(&obj, generateHelp(a, x.Subcommands))
+
+							return
+						}
+
+						targetcmd := tokens[1]
+						launched := false
+
+						for _, v := range *x.Subcommands {
+							if targetcmd == v.Aliases[0] && !v.Hidden {
+								launched = true
+								go v.Handler(&ctx, &obj)
+							}
+						}
+
+						if !launched {
+							core.ReplySimple(&obj, generateHelp(a, x.Subcommands))
+						}
+					}
 				}
 			}
 		}

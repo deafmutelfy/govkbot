@@ -2,6 +2,7 @@ package main
 
 import (
 	"vkbot/commands/curse"
+	"vkbot/commands/dota2"
 	"vkbot/commands/getrole"
 	"vkbot/commands/help"
 	"vkbot/commands/initrole"
@@ -17,8 +18,8 @@ import (
 	"vkbot/core"
 )
 
-func commandPool() core.PoolType {
-	return core.PoolType{
+func commandPool() []core.Command {
+	return []core.Command{
 		ping.Register(),
 		nick.Register(),
 		online.Register(),
@@ -32,5 +33,6 @@ func commandPool() core.PoolType {
 		initrole.Register(),
 		getrole.Register(),
 		kick.Register(),
+		dota2.Register(),
 	}
 }

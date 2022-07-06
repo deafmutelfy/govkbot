@@ -12,5 +12,7 @@ type Command struct {
 	Aliases     []string
 	Description string
 	Handler     CommandHandler
+	Metacommand bool
+	Subcommands *[]Command
 	Hidden      bool
 }
