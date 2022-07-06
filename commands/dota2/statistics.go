@@ -3,7 +3,6 @@ package dota2
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"vkbot/core"
@@ -53,11 +52,36 @@ func statisticsGenMsg(accId int64) string {
 		return msg
 	}
 
-	log.Println(float64(100) / float64(wl.Lose+wl.Win))
-
 	msg += "\n\nПобед: " + strconv.Itoa(wl.Win)
 	msg += "\nПоражений: " + strconv.Itoa(wl.Lose)
 	msg += "\nВинрейт: " + fmt.Sprintf("%.2f", float64(100)/float64(wl.Lose+wl.Win)*float64(wl.Win)) + "%"
+
+	h, _, err := client.PlayerService.Heroes(accId, nil)
+	if err != nil {
+		msg = core.ERR_UNKNOWN
+
+		return msg
+	}
+	hId, _ := strconv.Atoi(h[0].HeroID)
+
+	msg += "\n\nСигнатурный герой: " + heroes[hId-1]
+	msg += "\nВинрейт на сигнатурном герое: " + fmt.Sprintf("%.2f", float64(100)/float64(h[0].Games)*float64(h[0].Win)) + "%"
+
+	rm, _, err := client.PlayerService.RecentMatches(accId)
+	if err != nil {
+		msg = core.ERR_UNKNOWN
+
+		return msg
+	}
+
+	msg += "\n\nПоследний матч:\n"
+	if rm[0].RadiantWin {
+		msg += "Победа"
+	} else {
+		msg += "Поражение"
+	}
+	msg += " - " + heroes[rm[0].HeroID-1]
+	msg += " - " + fmt.Sprintf("%d/%d/%d", rm[0].Kills, rm[0].Deaths, rm[0].Assists)
 
 	return msg
 }
