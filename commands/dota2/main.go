@@ -18,6 +18,11 @@ func Register() core.Command {
 				Description: "получить статистику по профилю",
 				Handler:     statistics,
 			},
+			{
+				Aliases:     []string{"прогресс"},
+				Description: "получить изменение MMR за определенное количество дней (без учёта смурф пула)",
+				Handler:     progress,
+			},
 		},
 	}
 }

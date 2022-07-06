@@ -90,9 +90,8 @@ func statistics(ctx *context.Context, obj *events.MessageNewObject) {
 	s := core.GetStorage()
 
 	id, err := s.Db.Get(s.Ctx, fmt.Sprintf("dota2.%d.id", obj.Message.FromID)).Result()
-
 	if id == "" || err != nil {
-		core.ReplySimple(obj, "ошибка: ваш ID не установлен. Для установки ID воспользуйтесь командой \"/д2 айди <ваш ID>\"")
+		core.ReplySimple(obj, ERR_NO_ID)
 
 		return
 	}

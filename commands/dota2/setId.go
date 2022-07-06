@@ -11,7 +11,6 @@ import (
 
 func setId(ctx *context.Context, obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
-
 	if len(args) < 2 {
 		core.ReplySimple(obj, "ошибка: необходимо указать свой ID (циферный идентификатор, его можно взять непосредственно в игре, либо на Dotabuff)")
 
@@ -19,7 +18,6 @@ func setId(ctx *context.Context, obj *events.MessageNewObject) {
 	}
 
 	id, err := strconv.Atoi(args[1])
-
 	if err != nil {
 		core.ReplySimple(obj, "ошибка: недопустимый ID")
 
