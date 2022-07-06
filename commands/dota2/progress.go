@@ -53,6 +53,10 @@ func progress(ctx *context.Context, obj *events.MessageNewObject) {
 	var w, l int
 
 	for _, x := range m {
+		if x.LobbyType == 0 {
+			continue
+		}
+
 		if x.RadiantWin {
 			w++
 		} else {
