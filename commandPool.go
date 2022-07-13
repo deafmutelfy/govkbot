@@ -8,10 +8,12 @@ import (
 	"vkbot/commands/initrole"
 	"vkbot/commands/kick"
 	"vkbot/commands/linus"
+	"vkbot/commands/listrole"
 	"vkbot/commands/nick"
 	"vkbot/commands/online"
 	"vkbot/commands/ping"
 	"vkbot/commands/rule34"
+	"vkbot/commands/setrole"
 	"vkbot/commands/top"
 	"vkbot/commands/tts"
 	"vkbot/commands/who"
@@ -34,5 +36,9 @@ func commandPool() []core.Command {
 		getrole.Register(),
 		kick.Register(),
 		dota2.Register(),
+		setrole.RegisterAdmin(),
+		setrole.RegisterModerator(),
+		setrole.RegisterPurge(),
+		listrole.Register(),
 	}
 }
