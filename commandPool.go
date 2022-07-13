@@ -1,6 +1,7 @@
 package main
 
 import (
+	"vkbot/commands/commemoration"
 	"vkbot/commands/curse"
 	"vkbot/commands/dota2"
 	"vkbot/commands/getrole"
@@ -40,5 +41,6 @@ func commandPool() []core.Command {
 		setrole.RegisterModerator(),
 		setrole.RegisterPurge(),
 		listrole.Register(),
+		commemoration.Register(),
 	}
 }
