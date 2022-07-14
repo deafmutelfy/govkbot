@@ -15,6 +15,7 @@ import (
 	"vkbot/commands/ping"
 	"vkbot/commands/rule34"
 	"vkbot/commands/setrole"
+	"vkbot/commands/soyjack"
 	"vkbot/commands/top"
 	"vkbot/commands/tts"
 	"vkbot/commands/who"
@@ -42,5 +43,6 @@ func commandPool() []core.Command {
 		setrole.RegisterPurge(),
 		listrole.Register(),
 		commemoration.Register(),
+		soyjack.Register(),
 	}
 }
