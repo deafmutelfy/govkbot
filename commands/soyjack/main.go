@@ -17,7 +17,7 @@ const linus_file_path = "commands/soyjack/soyboy.png"
 func Register() core.Command {
 	return core.Command{
 		Aliases:     []string{"сой", "сойджек"},
-		Description: "облить картинку соей",
+		Description: "обмазать картинку соей",
 		Handler:     handle,
 	}
 }
