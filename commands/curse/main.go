@@ -58,6 +58,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw := imagick.NewMagickWand()
 	mw.ReadImageBlob(bt)
 	mw.LiquidRescaleImage(mw.GetImageWidth()/2, mw.GetImageHeight()/2, 1, 0)
+	mw.ResizeImage(mw.GetImageWidth()*2, mw.GetImageHeight()*2, imagick.FILTER_UNDEFINED, 1)
 
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw.GetImageBlob()))
 
