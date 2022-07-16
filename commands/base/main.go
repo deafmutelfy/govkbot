@@ -27,14 +27,23 @@ func list(obj *events.MessageNewObject) {
 	r, err := http.Get(bazman_uri + "bases")
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
+
+		return
 	}
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
+
+		return
 	}
 
 	p, err := fastjson.ParseBytes(b)
+	if err != nil {
+		core.ReplySimple(obj, core.ERR_UNKNOWN)
+
+		return
+	}
 
 	msg := "список источников:"
 
