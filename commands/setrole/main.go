@@ -11,7 +11,7 @@ import (
 func RegisterAdmin() core.Command {
 	return core.Command{
 		Aliases:     []string{"админ"},
-		Description: "выдать роль админа пользователю",
+		Description: "выдать роль администратора пользователю",
 		Handler: func(ctx *context.Context, obj *events.MessageNewObject) {
 			handle(ctx, obj, rolesystem.ROLE_ADMINISTRATOR)
 		},
@@ -31,7 +31,7 @@ func RegisterModerator() core.Command {
 func RegisterPurge() core.Command {
 	return core.Command{
 		Aliases:     []string{"отозвать"},
-		Description: "отозвать должность пользователя",
+		Description: "отозвать роль пользователя",
 		Handler: func(ctx *context.Context, obj *events.MessageNewObject) {
 			handle(ctx, obj, rolesystem.ROLE_MEMBER)
 		},

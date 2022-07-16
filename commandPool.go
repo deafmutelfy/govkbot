@@ -1,6 +1,7 @@
 package main
 
 import (
+	"vkbot/commands/base"
 	"vkbot/commands/commemoration"
 	"vkbot/commands/curse"
 	"vkbot/commands/dota2"
@@ -44,5 +45,6 @@ func commandPool() []core.Command {
 		listrole.Register(),
 		commemoration.Register(),
 		soyjack.Register(),
+		base.Register(),
 	}
 }
