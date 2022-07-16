@@ -13,7 +13,7 @@ import (
 	"github.com/valyala/fastjson"
 )
 
-const bazman_uri = "https://bazman.ctw.re/"
+const bazman_uri = "bazman.ctw.re"
 
 func Register() core.Command {
 	return core.Command{
@@ -24,7 +24,7 @@ func Register() core.Command {
 }
 
 func list(obj *events.MessageNewObject) {
-	r, err := http.Get(bazman_uri + "bases")
+	r, err := http.Get("https://" + bazman_uri + "/bases")
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
 
@@ -79,7 +79,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	u := &url.URL{
 		Scheme:   "https",
-		Host:     "bazman.ctw.re",
+		Host:     bazman_uri,
 		Path:     "gen",
 		RawQuery: q.Encode(),
 	}

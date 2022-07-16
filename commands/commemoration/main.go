@@ -11,7 +11,6 @@ import (
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
-const error_image_not_attached = "ошибка: нужно прикрепить картинку"
 const frame_file_path = "commands/commemoration/data.png"
 
 func Register() core.Command {
@@ -28,14 +27,14 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	atts := core.ExtractAttachments(obj)
 	if len(atts) == 0 {
-		core.ReplySimple(obj, error_image_not_attached)
+		core.ReplySimple(obj, core.ERR_NO_PICTURE)
 
 		return
 	}
 
 	attachment := atts[0]
 	if attachment.Type != "photo" {
-		core.ReplySimple(obj, error_image_not_attached)
+		core.ReplySimple(obj, core.ERR_NO_PICTURE)
 
 		return
 	}
