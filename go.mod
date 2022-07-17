@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/BurntSushi/toml v1.1.0 // indirect
-	github.com/SevereCloud/vksdk v1.10.0 // indirect
 	github.com/SevereCloud/vksdk/v2 v2.14.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dghubble/sling v1.3.0 // indirect

@@ -17,6 +17,7 @@ import (
 	"vkbot/commands/rule34"
 	"vkbot/commands/setrole"
 	"vkbot/commands/soyjack"
+	"vkbot/commands/tacticalpic"
 	"vkbot/commands/top"
 	"vkbot/commands/tts"
 	"vkbot/commands/who"
@@ -45,6 +46,7 @@ func commandPool() []core.Command {
 		listrole.Register(),
 		commemoration.Register(),
 		soyjack.Register(),
+		tacticalpic.Register(),
 		base.Register(),
 	}
 }

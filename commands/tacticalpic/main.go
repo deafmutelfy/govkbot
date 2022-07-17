@@ -1,9 +1,11 @@
-package commemoration
+package tacticalpic
 
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"vkbot/core"
 
@@ -11,12 +13,16 @@ import (
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
-const frame_file_path = "commands/commemoration/data.png"
+var speech_bubbles = [...]string{
+	"center",
+	"right",
+	"left",
+}
 
 func Register() core.Command {
 	return core.Command{
-		Aliases:     []string{"поминки"},
-		Description: "обернуть картинку похоронной рамкой",
+		Aliases:     []string{"боевая", "бой"},
+		Description: "сделать картинку боевой",
 		Handler:     handle,
 	}
 }
@@ -55,14 +61,33 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	mw1 := imagick.NewMagickWand()
 	mw1.ReadImageBlob(bt)
-	mw1.ResizeImage(462, 584, imagick.FILTER_UNDEFINED, 1)
-	mw1.TransformImageColorspace(imagick.COLORSPACE_GRAY)
+
+	args := core.ExtractArguments(obj)
+	var idx int
+	if len(args) == 0 {
+		idx = rand.Intn(2)
+	} else {
+		switch args[0] {
+		case "справа":
+			idx = 0
+		case "слева":
+			idx = 1
+		case "центр":
+			idx = 2
+		default:
+			core.ReplySimple(obj, "типы боевых картинок: справа/слева/центр")
+			return
+		}
+	}
 
 	mw2 := imagick.NewMagickWand()
-	mw2.ReadImage(frame_file_path)
-	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 496, 167)
+	mw2.ReadImage(fmt.Sprintf("commands/tacticalpic/speech-bubble%d.png", idx))
+	width := mw1.GetImageWidth()
+	height := uint(float32(mw2.GetImageHeight()) * (float32(width) / float32(mw2.GetImageWidth())))
+	mw2.AdaptiveResizeImage(width, height)
+	mw1.CompositeImage(mw2, imagick.COMPOSITE_OP_OVER, 0, 0)
 
-	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw2.GetImageBlob()))
+	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw1.GetImageBlob()))
 
 	mw1.Destroy()
 	mw2.Destroy()
