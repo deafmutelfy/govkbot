@@ -57,9 +57,9 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw.ReadImageBlob(bt)
 	mw.LiquidRescaleImage(mw.GetImageWidth()/2, mw.GetImageHeight()/2, 1, 0)
 
-	mw.Destroy()
-
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(0, bytes.NewReader(mw.GetImageBlob()))
+
+	mw.Destroy()
 
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
