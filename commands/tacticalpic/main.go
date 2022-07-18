@@ -27,9 +27,22 @@ func Register() core.Command {
 	}
 }
 
+func list(obj *events.MessageNewObject) {
+	core.ReplySimple(obj, "возможные расположения диалогового облака:\nсправа\nцентр\nслева")
+}
+
 func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	imagick.Initialize()
 	defer imagick.Terminate()
+
+	args := core.ExtractArguments(obj)
+	if len(args) > 0 {
+		if args[0] == "лист" {
+			list(obj)
+
+			return
+		}
+	}
 
 	atts := core.ExtractAttachments(obj)
 	if len(atts) == 0 {
@@ -62,7 +75,6 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw1 := imagick.NewMagickWand()
 	mw1.ReadImageBlob(bt)
 
-	args := core.ExtractArguments(obj)
 	var idx int
 	if len(args) == 0 {
 		idx = rand.Intn(2)
@@ -75,7 +87,8 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		case "центр":
 			idx = 2
 		default:
-			core.ReplySimple(obj, "типы боевых картинок: справа/слева/центр")
+			list(obj)
+
 			return
 		}
 	}
