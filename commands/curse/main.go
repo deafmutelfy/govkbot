@@ -60,7 +60,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	mw.Destroy()
 
-	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw.GetImageBlob()))
+	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(0, bytes.NewReader(mw.GetImageBlob()))
 
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)

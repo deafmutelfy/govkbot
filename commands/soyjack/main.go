@@ -70,7 +70,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw2.ReadImage(soyboy_file_path)
 	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 25, 66)
 
-	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw2.GetImageBlob()))
+	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(0, bytes.NewReader(mw2.GetImageBlob()))
 
 	mw1.Destroy()
 	mw2.Destroy()

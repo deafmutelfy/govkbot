@@ -100,7 +100,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw2.AdaptiveResizeImage(width, height)
 	mw1.CompositeImage(mw2, imagick.COMPOSITE_OP_OVER, 0, 0)
 
-	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw1.GetImageBlob()))
+	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(0, bytes.NewReader(mw1.GetImageBlob()))
 
 	mw1.Destroy()
 	mw2.Destroy()
