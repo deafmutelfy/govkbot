@@ -13,6 +13,12 @@ import (
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
+var speech_bubbles = [...]string{
+	"center",
+	"right",
+	"left",
+}
+
 func Register() core.Command {
 	return core.Command{
 		Aliases:     []string{"боевая", "бой"},
@@ -21,11 +27,22 @@ func Register() core.Command {
 	}
 }
 
-const bubble_height_default = 260
+func list(obj *events.MessageNewObject) {
+	core.ReplySimple(obj, "возможные расположения диалогового облака:\nсправа\nцентр\nслева")
+}
 
 func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	imagick.Initialize()
 	defer imagick.Terminate()
+
+	args := core.ExtractArguments(obj)
+	if len(args) > 0 {
+		if args[0] == "лист" {
+			list(obj)
+
+			return
+		}
+	}
 
 	atts := core.ExtractAttachments(obj)
 	if len(atts) == 0 {
@@ -58,7 +75,6 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw1 := imagick.NewMagickWand()
 	mw1.ReadImageBlob(bt)
 
-	args := core.ExtractArguments(obj)
 	var idx int
 	if len(args) == 0 {
 		idx = rand.Intn(2)
@@ -71,7 +87,8 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		case "центр":
 			idx = 2
 		default:
-			core.ReplySimple(obj, "типы боевых картинок: справа/слева/центр")
+			list(obj)
+
 			return
 		}
 	}
@@ -79,12 +96,8 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw2 := imagick.NewMagickWand()
 	mw2.ReadImage(fmt.Sprintf("commands/tacticalpic/speech-bubble%d.png", idx))
 	width := mw1.GetImageWidth()
-	ratio := float32(width) / float32(mw2.GetImageWidth())
-	height := uint(float32(mw2.GetImageHeight()) * ratio)
+	height := uint(float32(mw2.GetImageHeight()) * (float32(width) / float32(mw2.GetImageWidth())))
 	mw2.AdaptiveResizeImage(width, height)
-
-	bubble_height := bubble_height_default * ratio
-	mw1.ExtentImage(width, uint(float32(mw1.GetImageHeight())+bubble_height), 0, int(bubble_height)*-1)
 	mw1.CompositeImage(mw2, imagick.COMPOSITE_OP_OVER, 0, 0)
 
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw1.GetImageBlob()))
