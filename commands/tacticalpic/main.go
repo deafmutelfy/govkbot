@@ -13,12 +13,6 @@ import (
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
-var speech_bubbles = [...]string{
-	"center",
-	"right",
-	"left",
-}
-
 func Register() core.Command {
 	return core.Command{
 		Aliases:     []string{"боевая", "бой"},
@@ -30,6 +24,8 @@ func Register() core.Command {
 func list(obj *events.MessageNewObject) {
 	core.ReplySimple(obj, "возможные расположения диалогового облака:\nсправа\nцентр\nслева")
 }
+
+const bubble_height_default = 260
 
 func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	imagick.Initialize()
@@ -96,8 +92,12 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw2 := imagick.NewMagickWand()
 	mw2.ReadImage(fmt.Sprintf("commands/tacticalpic/speech-bubble%d.png", idx))
 	width := mw1.GetImageWidth()
-	height := uint(float32(mw2.GetImageHeight()) * (float32(width) / float32(mw2.GetImageWidth())))
+	ratio := float32(width) / float32(mw2.GetImageWidth())
+	height := uint(float32(mw2.GetImageHeight()) * ratio)
 	mw2.AdaptiveResizeImage(width, height)
+
+	bubble_height := bubble_height_default * ratio
+	mw1.ExtentImage(width, uint(float32(mw1.GetImageHeight())+bubble_height), 0, int(bubble_height)*-1)
 	mw1.CompositeImage(mw2, imagick.COMPOSITE_OP_OVER, 0, 0)
 
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw1.GetImageBlob()))
