@@ -100,7 +100,7 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw1.ExtentImage(width, uint(float32(mw1.GetImageHeight())+bubble_height), 0, int(bubble_height)*-1)
 	mw1.CompositeImage(mw2, imagick.COMPOSITE_OP_OVER, 0, 0)
 
-	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw1.GetImageBlob()))
+	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(0, bytes.NewReader(mw1.GetImageBlob()))
 
 	mw1.Destroy()
 	mw2.Destroy()
