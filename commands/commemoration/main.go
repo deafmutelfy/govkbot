@@ -64,6 +64,9 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw2.GetImageBlob()))
 
+	mw1.Destroy()
+	mw2.Destroy()
+
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
 

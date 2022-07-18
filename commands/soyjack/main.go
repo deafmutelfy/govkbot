@@ -71,6 +71,10 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 25, 66)
 
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(obj.Message.PeerID, bytes.NewReader(mw2.GetImageBlob()))
+
+	mw1.Destroy()
+	mw2.Destroy()
+
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
 
