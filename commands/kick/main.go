@@ -22,7 +22,6 @@ func Register() core.Command {
 
 func handle(ctx *context.Context, obj *events.MessageNewObject) {
 	id := core.GetMention(obj)
-
 	if id == 0 {
 		core.ReplySimple(obj, core.ERR_NO_TARGET)
 

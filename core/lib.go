@@ -12,10 +12,15 @@ import (
 )
 
 func ReplySimple(obj *events.MessageNewObject, msg string, attachment ...interface{}) error {
-	b := params.NewMessagesSendBuilder()
 	fromId := obj.Message.FromID
 
-	b.Message("[id" + strconv.Itoa(fromId) + "|" + GetNickname(fromId) + "], " + msg)
+	return SendSimple(obj, "[id"+strconv.Itoa(fromId)+"|"+GetNickname(fromId)+"], "+msg, attachment...)
+}
+
+func SendSimple(obj *events.MessageNewObject, msg string, attachment ...interface{}) error {
+	b := params.NewMessagesSendBuilder()
+
+	b.Message(msg)
 	b.DisableMentions(true)
 	b.RandomID(0)
 	b.PeerID(obj.Message.PeerID)

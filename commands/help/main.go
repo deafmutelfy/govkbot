@@ -32,7 +32,12 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 			aliases := []string{}
 
 			for _, v := range x.Aliases {
-				aliases = append(aliases, "/"+v)
+				prefix := "/"
+				if x.NoPrefix {
+					prefix = ""
+				}
+
+				aliases = append(aliases, prefix+v)
 			}
 
 			msg += strings.Join(aliases, ", ") + " - " + x.Description + "\n"

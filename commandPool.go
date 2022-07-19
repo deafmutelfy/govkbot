@@ -1,6 +1,7 @@
 package main
 
 import (
+	"vkbot/commands/actions"
 	"vkbot/commands/base"
 	"vkbot/commands/commemoration"
 	"vkbot/commands/curse"
@@ -48,5 +49,6 @@ func commandPool() []core.Command {
 		soyjack.Register(),
 		tacticalpic.Register(),
 		base.Register(),
+		actions.Register(),
 	}
 }

@@ -15,4 +15,5 @@ type Command struct {
 	Metacommand bool
 	Subcommands *[]Command
 	Hidden      bool
+	NoPrefix    bool
 }

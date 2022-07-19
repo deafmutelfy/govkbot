@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"vkbot/core"
 
-	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
 	"github.com/valyala/fastjson"
 )
@@ -103,13 +102,5 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	bl := params.NewMessagesSendBuilder()
-
-	bl.Message(string(b))
-	bl.DisableMentions(true)
-	bl.RandomID(0)
-	bl.PeerID(obj.Message.PeerID)
-	bl.DontParseLinks(true)
-
-	core.GetStorage().Vk.MessagesSend(bl.Params)
+	core.SendSimple(obj, string(b))
 }

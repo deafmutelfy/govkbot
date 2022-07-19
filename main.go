@@ -49,15 +49,17 @@ func main() {
 		if len(tokens[0]) <= 1 {
 			return
 		}
-		if tokens[0][0] != '/' {
-			return
-		}
 
 		targetcmd := tokens[0][1:]
 
 		for _, x := range cmds {
+			if tokens[0][0] != '/' && x.NoPrefix {
+				targetcmd = tokens[0]
+			}
+
 			for _, a := range x.Aliases {
 				if targetcmd == a && !x.Hidden {
+
 					if !x.Metacommand {
 						go x.Handler(&ctx, &obj)
 					} else {
