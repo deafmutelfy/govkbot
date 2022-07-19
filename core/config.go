@@ -12,7 +12,9 @@ type Config struct {
 
 func (s *Config) Load(filename string) error {
 	if err := cleanenv.ReadConfig(filename, s); err != nil {
-		return err
+		if err := cleanenv.ReadEnv(s); err != nil {
+			return err
+		}
 	}
 
 	return nil

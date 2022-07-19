@@ -21,7 +21,10 @@ func main() {
 	s := core.GetStorage()
 	s.Cfg = core.Config{}
 
-	s.Cfg.Load("config.yaml")
+	if err := s.Cfg.Load("config.yaml"); err != nil {
+		log.Fatalln(err)
+	}
+
 	s.Vk = api.NewVK(s.Cfg.Token)
 
 	opt, err := redis.ParseURL(s.Cfg.RedisUrl)
