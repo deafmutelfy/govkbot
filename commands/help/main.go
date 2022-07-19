@@ -22,7 +22,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func handle(_ *context.Context, obj *events.MessageNewObject) {
 	once.Do(func() {
 		for _, x := range *core.GetStorage().CommandPool {
 			if x.Hidden {

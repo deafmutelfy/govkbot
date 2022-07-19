@@ -21,7 +21,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func handle(_ *context.Context, obj *events.MessageNewObject) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 

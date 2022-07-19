@@ -18,7 +18,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func handle(_ *context.Context, obj *events.MessageNewObject) {
 	nickname := strings.Join(core.ExtractArguments(obj), " ")
 
 	if nickname == "" {

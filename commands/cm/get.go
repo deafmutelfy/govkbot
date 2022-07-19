@@ -1,4 +1,4 @@
-package getrole
+package cm
 
 import (
 	"context"
@@ -9,15 +9,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func Register() core.Command {
-	return core.Command{
-		Aliases:     []string{"роль"},
-		Description: "узнать свою роль в беседе",
-		Handler:     handle,
-	}
-}
-
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func getrole(_ *context.Context, obj *events.MessageNewObject) {
 	s := core.GetStorage()
 
 	initialized, _ := s.Db.Get(s.Ctx, fmt.Sprintf("roles.%d.initialized", obj.Message.PeerID)).Result()

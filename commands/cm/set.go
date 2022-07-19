@@ -1,4 +1,4 @@
-package setrole
+package cm
 
 import (
 	"context"
@@ -9,7 +9,13 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func handle(ctx *context.Context, obj *events.MessageNewObject, targetRole int) {
+func setrole(_ *context.Context, obj *events.MessageNewObject, targetRole int) {
+	if err := cmInit(obj); err != nil {
+		core.ReplySimple(obj, err.Error())
+
+		return
+	}
+
 	id := core.GetMention(obj)
 
 	if id == 0 {

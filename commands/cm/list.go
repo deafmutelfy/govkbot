@@ -1,4 +1,4 @@
-package listrole
+package cm
 
 import (
 	"context"
@@ -14,14 +14,6 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func Register() core.Command {
-	return core.Command{
-		Aliases:     []string{"состав"},
-		Description: "состав участников беседы по ролям",
-		Handler:     handle,
-	}
-}
-
 func extractId(key string) int {
 	l := strings.Split(key, ".")
 	idint, _ := strconv.Atoi(l[len(l)-1])
@@ -29,7 +21,13 @@ func extractId(key string) int {
 	return idint
 }
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func listrole(_ *context.Context, obj *events.MessageNewObject) {
+	if err := cmInit(obj); err != nil {
+		core.ReplySimple(obj, err.Error())
+
+		return
+	}
+
 	s := core.GetStorage()
 
 	initialized, _ := s.Db.Get(s.Ctx, fmt.Sprintf("roles.%d.initialized", obj.Message.PeerID)).Result()

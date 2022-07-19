@@ -46,7 +46,7 @@ func getgTTSReader(text, lang string) (io.Reader, error) {
 	return response.Body, nil
 }
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func handle(_ *context.Context, obj *events.MessageNewObject) {
 	txt := strings.Join(core.ExtractArguments(obj), " ")
 
 	if txt == "" {

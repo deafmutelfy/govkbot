@@ -53,7 +53,7 @@ func list(obj *events.MessageNewObject) {
 	core.ReplySimple(obj, msg)
 }
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func handle(_ *context.Context, obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
 	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: не указан источник. Список доступных источников можно получить командой \"/база лист\"")

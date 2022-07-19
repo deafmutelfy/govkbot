@@ -1,4 +1,4 @@
-package kick
+package cm
 
 import (
 	"context"
@@ -12,15 +12,13 @@ import (
 	"github.com/SevereCloud/vksdk/v2/object"
 )
 
-func Register() core.Command {
-	return core.Command{
-		Aliases:     []string{"кик"},
-		Description: "исключить участника беседы",
-		Handler:     handle,
-	}
-}
+func kick(_ *context.Context, obj *events.MessageNewObject) {
+	if err := cmInit(obj); err != nil {
+		core.ReplySimple(obj, err.Error())
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+		return
+	}
+
 	id := core.GetMention(obj)
 	if id == 0 {
 		core.ReplySimple(obj, core.ERR_NO_TARGET)

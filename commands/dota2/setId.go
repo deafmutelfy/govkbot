@@ -9,7 +9,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func setId(ctx *context.Context, obj *events.MessageNewObject) {
+func setId(_ *context.Context, obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
 	if len(args) < 2 {
 		core.ReplySimple(obj, "ошибка: необходимо указать свой ID (циферный идентификатор, его можно взять непосредственно в игре, либо на Dotabuff)")

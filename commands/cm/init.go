@@ -1,4 +1,4 @@
-package initrole
+package cm
 
 import (
 	"context"
@@ -13,17 +13,9 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func Register() core.Command {
-	return core.Command{
-		Aliases:     []string{"инитроль"},
-		Description: "инициализировать систему ролей в беседе",
-		Handler:     handle,
-	}
-}
-
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
-	if obj.Message.PeerID == obj.Message.FromID {
-		core.ReplySimple(obj, core.ERR_NO_DM)
+func initrole(_ *context.Context, obj *events.MessageNewObject) {
+	if err := cmInit(obj); err != nil {
+		core.ReplySimple(obj, err.Error())
 
 		return
 	}

@@ -19,18 +19,20 @@ func Register() core.Command {
 	}
 }
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func handle(_ *context.Context, obj *events.MessageNewObject) {
 	id := core.GetMention(obj)
 	if id <= 0 {
 		return
 	}
+
+	s := core.GetStorage()
 
 	b := params.NewUsersGetBuilder()
 
 	b.UserIDs([]string{strconv.Itoa(obj.Message.FromID)})
 	b.Fields([]string{"sex"})
 
-	res, err := core.GetStorage().Vk.UsersGet(b.Params)
+	res, err := s.Vk.UsersGet(b.Params)
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
 
@@ -52,15 +54,33 @@ func handle(ctx *context.Context, obj *events.MessageNewObject) {
 		action = "опустил" + postfix + " 😝"
 	}
 
+	b.Fields([]string{})
+	getnick := func(uid int) string {
+		name := core.GetAlias(uid)
+		if name == "" {
+			b.UserIDs([]string{strconv.Itoa(uid)})
+
+			res, err := s.Vk.UsersGet(b.Params)
+
+			if err != nil {
+				name = "<без имени>"
+			}
+
+			name = res[0].FirstName + " " + res[0].LastName
+		}
+
+		return name
+	}
+
 	core.SendSimple(obj, "[id"+
 		strconv.Itoa(obj.Message.FromID)+
 		"|"+
-		core.GetNickname(obj.Message.FromID)+
+		getnick(obj.Message.FromID)+
 		"] "+
 		action+
 		" [id"+
 		strconv.Itoa(id)+
 		"|"+
-		core.GetNickname(id)+
+		getnick(id)+
 		"]")
 }

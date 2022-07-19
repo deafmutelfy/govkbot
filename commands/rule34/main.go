@@ -19,7 +19,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(ctx *context.Context, obj *events.MessageNewObject) {
+func handle(_ *context.Context, obj *events.MessageNewObject) {
 	tags := core.ExtractArguments(obj)
 
 	if len(tags) == 0 {

@@ -3,20 +3,16 @@ package main
 import (
 	"vkbot/commands/actions"
 	"vkbot/commands/base"
+	"vkbot/commands/cm"
 	"vkbot/commands/commemoration"
 	"vkbot/commands/curse"
 	"vkbot/commands/dota2"
-	"vkbot/commands/getrole"
 	"vkbot/commands/help"
-	"vkbot/commands/initrole"
-	"vkbot/commands/kick"
 	"vkbot/commands/linus"
-	"vkbot/commands/listrole"
 	"vkbot/commands/nick"
 	"vkbot/commands/online"
 	"vkbot/commands/ping"
 	"vkbot/commands/rule34"
-	"vkbot/commands/setrole"
 	"vkbot/commands/soyjack"
 	"vkbot/commands/tacticalpic"
 	"vkbot/commands/top"
@@ -37,18 +33,12 @@ func commandPool() []core.Command {
 		tts.Register(),
 		rule34.Register(),
 		curse.Register(),
-		initrole.Register(),
-		getrole.Register(),
-		kick.Register(),
 		dota2.Register(),
-		setrole.RegisterAdmin(),
-		setrole.RegisterModerator(),
-		setrole.RegisterPurge(),
-		listrole.Register(),
 		commemoration.Register(),
 		soyjack.Register(),
 		tacticalpic.Register(),
 		base.Register(),
 		actions.Register(),
+		cm.Register(),
 	}
 }
