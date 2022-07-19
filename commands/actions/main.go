@@ -2,6 +2,7 @@ package actions
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"strings"
 	"vkbot/core"
@@ -20,12 +21,21 @@ func Register() core.Command {
 }
 
 func handle(_ *context.Context, obj *events.MessageNewObject) {
+	s := core.GetStorage()
+
+	if obj.Message.PeerID == obj.Message.FromID {
+		return
+	}
+
+	enabled, _ := s.Db.Get(s.Ctx, fmt.Sprintf("rp.%d.enabled", obj.Message.PeerID)).Result()
+	if enabled == "false" {
+		return
+	}
+
 	id := core.GetMention(obj)
 	if id <= 0 {
 		return
 	}
-
-	s := core.GetStorage()
 
 	b := params.NewUsersGetBuilder()
 

@@ -56,6 +56,11 @@ func Register() core.Command {
 					setrole(ctx, obj, rolesystem.ROLE_MEMBER)
 				},
 			},
+			{
+				Aliases:     []string{"рп"},
+				Description: "включить/отключить RP команды (обнять, т.п.) в этом чате",
+				Handler:     rp,
+			},
 		},
 	}
 }
