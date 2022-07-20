@@ -14,7 +14,7 @@ import (
 func Register() core.Command {
 	return core.Command{
 		Aliases:     []string{"обнять", "поцеловать", "опустить"},
-		Description: "различные действия в отношении другого пользователя",
+		Description: "различные действия в отношении другого пользователя (RP команды)",
 		NoPrefix:    true,
 		Handler:     handle,
 	}
@@ -65,32 +65,16 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 	}
 
 	b.Fields([]string{})
-	getnick := func(uid int) string {
-		name := core.GetAlias(uid)
-		if name == "" {
-			b.UserIDs([]string{strconv.Itoa(uid)})
-
-			res, err := s.Vk.UsersGet(b.Params)
-
-			if err != nil {
-				name = "<без имени>"
-			}
-
-			name = res[0].FirstName + " " + res[0].LastName
-		}
-
-		return name
-	}
 
 	core.SendSimple(obj, "[id"+
 		strconv.Itoa(obj.Message.FromID)+
 		"|"+
-		getnick(obj.Message.FromID)+
+		core.GetNicknameOrFullName(obj.Message.FromID)+
 		"] "+
 		action+
 		" [id"+
 		strconv.Itoa(id)+
 		"|"+
-		getnick(id)+
+		core.GetNicknameOrFullName(id)+
 		"]")
 }

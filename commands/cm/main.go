@@ -61,6 +61,11 @@ func Register() core.Command {
 				Description: "включить/отключить RP команды (обнять, т.п.) в этом чате",
 				Handler:     rp,
 			},
+			{
+				Aliases:     []string{"приветствие"},
+				Description: "изменить текущее приветствие",
+				Handler:     greeting,
+			},
 		},
 	}
 }

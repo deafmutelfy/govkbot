@@ -78,6 +78,25 @@ func GetNickname(userId int) string {
 	return nickname
 }
 
+func GetNicknameOrFullName(userId int) string {
+	name := GetAlias(userId)
+
+	if name == "" {
+		b := params.NewUsersGetBuilder()
+
+		b.UserIDs([]string{strconv.Itoa(userId)})
+
+		res, err := GetStorage().Vk.UsersGet(b.Params)
+		if err != nil {
+			name = "<без имени>"
+		} else {
+			name = res[0].FirstName + " " + res[0].LastName
+		}
+	}
+
+	return name
+}
+
 func ExtractArguments(obj *events.MessageNewObject) []string {
 	return strings.Split(obj.Message.Text, " ")[1:]
 }

@@ -41,7 +41,16 @@ func main() {
 	cmds := commandPool()
 	s.CommandPool = &cmds
 
+	res, _ := s.Vk.GroupsGetByID(nil)
+	s.Cfg.GroupId = res[0].ID
+
 	cb.MessageNew(func(ctx context.Context, obj events.MessageNewObject) {
+		if obj.Message.Action.Type == "chat_invite_user" {
+			handleChatInviteUser(&obj)
+
+			return
+		}
+
 		tokens := strings.Split(obj.Message.Text, " ")
 		if len(tokens) == 0 {
 			return
