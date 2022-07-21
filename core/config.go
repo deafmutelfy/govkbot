@@ -9,7 +9,9 @@ type Config struct {
 	RedisUrl        string `yaml:"redis_url" env:"REDIS_URL"`
 	BotOwnerId      string `yaml:"bot_owner_id" env:"BOT_OWNER_ID"`
 	Host            string `yaml:"host" env:"HOST"`
-	GroupId         int
+	EventManager    string `yaml:"event_manager" env:"EVENT_MANAGER"`
+
+	GroupId int
 }
 
 func (s *Config) Load(filename string) error {

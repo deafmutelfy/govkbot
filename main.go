@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log"
 	"math/rand"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/callback"
 	"github.com/SevereCloud/vksdk/v2/events"
+	"github.com/SevereCloud/vksdk/v2/longpoll-bot"
 	"github.com/go-redis/redis/v9"
 )
 
@@ -35,16 +37,29 @@ func main() {
 	s.Db = redis.NewClient(opt)
 	s.Ctx = context.Background()
 
-	cb := callback.NewCallback()
-	cb.ConfirmationKey = s.Cfg.ConfirmationKey
-
 	cmds := commandPool()
 	s.CommandPool = &cmds
 
 	res, _ := s.Vk.GroupsGetByID(nil)
 	s.Cfg.GroupId = res[0].ID
 
-	cb.MessageNew(func(ctx context.Context, obj events.MessageNewObject) {
+	var h eventManager
+	if s.Cfg.EventManager == "callback" {
+		cb := callback.NewCallback()
+		cb.ConfirmationKey = s.Cfg.ConfirmationKey
+
+		h = cb
+	} else if s.Cfg.EventManager == "longpoll" {
+		h, err = longpoll.NewLongPoll(s.Vk, s.Cfg.GroupId)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		log.Fatalln(errors.New("unknowd event manager: " + s.Cfg.EventManager))
+	}
+
+	h.MessageNew(func(ctx context.Context, obj events.MessageNewObject) {
 		if obj.Message.Action.Type == "chat_invite_user" {
 			handleChatInviteUser(&obj)
 
@@ -96,6 +111,10 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/callback", cb.HandleFunc)
-	http.ListenAndServe(s.Cfg.Host+":"+s.Cfg.Port, nil)
+	if s.Cfg.EventManager == "callback" {
+		http.HandleFunc("/callback", h.(eventManagerCallback).HandleFunc)
+		http.ListenAndServe(s.Cfg.Host+":"+s.Cfg.Port, nil)
+	} else {
+		h.(eventManagerLongpoll).Run()
+	}
 }
