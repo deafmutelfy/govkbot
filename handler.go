@@ -50,7 +50,10 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 		q, ok := queuePool[x.QueueName]
 		if !ok {
 			q = queue.NewPool(3)
+
+			queuePoolMutex.Lock()
 			queuePool[x.QueueName] = q
+			queuePoolMutex.Unlock()
 		}
 
 		if core.IsInArray(queueIds, obj.Message.FromID) {
@@ -59,6 +62,7 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 			return
 		}
 
+		queuePoolMutex.Lock()
 		q.QueueTask(func(_ context.Context) error {
 			x.Handler(&ctx, &obj)
 
@@ -66,9 +70,13 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 
 			return nil
 		})
+		queuePoolMutex.Unlock()
 
 		core.ReplySimple(&obj, "ваш запрос принят в обработку. Номер в очереди: "+strconv.Itoa(q.SubmittedTasks()-q.FailureTasks()-q.SuccessTasks()-q.BusyWorkers()))
+
+		queueIdsMutex.Lock()
 		queueIds = append(queueIds, obj.Message.FromID)
+		queueIdsMutex.Unlock()
 	}
 
 	launched := false

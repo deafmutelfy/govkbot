@@ -105,7 +105,7 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 
 	r := (*d).(map[string]interface{})
 
-	err = core.ReplySimple(obj, "ваша аудиозапись:",
+	core.ReplySimple(obj, "ваша аудиозапись:",
 		"audio"+
 			strconv.FormatInt(int64(r["owner_id"].(float64)), 10)+
 			"_"+
