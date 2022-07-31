@@ -6,7 +6,6 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"strings"
 	"time"
 	"vkbot/core"
 
@@ -28,6 +27,10 @@ func main() {
 	}
 
 	s.Vk = api.NewVK(s.Cfg.Token)
+
+	if s.Cfg.UserToken != "" {
+		s.UserVk = api.NewVK(s.Cfg.UserToken)
+	}
 
 	opt, err := redis.ParseURL(s.Cfg.RedisUrl)
 	if err != nil {
@@ -56,59 +59,11 @@ func main() {
 			log.Fatalln(err)
 		}
 	} else {
-		log.Fatalln(errors.New("unknowd event manager: " + s.Cfg.EventManager))
+		log.Fatalln(errors.New("unknown event manager: " + s.Cfg.EventManager))
 	}
 
 	h.MessageNew(func(ctx context.Context, obj events.MessageNewObject) {
-		if obj.Message.Action.Type == "chat_invite_user" {
-			handleChatInviteUser(&obj)
-
-			return
-		}
-
-		tokens := strings.Split(obj.Message.Text, " ")
-		if len(tokens) == 0 {
-			return
-		}
-		if len(tokens[0]) <= 1 {
-			return
-		}
-
-		targetcmd := tokens[0]
-
-		for _, x := range cmds {
-			for _, a := range x.Aliases {
-				if (((targetcmd == a) && (x.NoPrefix)) || ((targetcmd[1:] == a) && (!x.NoPrefix))) && !x.Hidden {
-					if (targetcmd[1:] == a) && (!x.NoPrefix) {
-						targetcmd = targetcmd[1:]
-					}
-
-					if !x.Metacommand {
-						go x.Handler(&ctx, &obj)
-					} else {
-						if len(tokens) < 2 {
-							core.ReplySimple(&obj, generateHelp(a, x.Subcommands))
-
-							return
-						}
-
-						targetcmd := tokens[1]
-						launched := false
-
-						for _, v := range *x.Subcommands {
-							if targetcmd == v.Aliases[0] && !v.Hidden {
-								launched = true
-								go v.Handler(&ctx, &obj)
-							}
-						}
-
-						if !launched {
-							core.ReplySimple(&obj, generateHelp(a, x.Subcommands))
-						}
-					}
-				}
-			}
-		}
+		handle(ctx, obj, nil)
 	})
 
 	if s.Cfg.EventManager == "callback" {

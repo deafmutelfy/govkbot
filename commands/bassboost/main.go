@@ -1,0 +1,114 @@
+package bassboost
+
+import (
+	"bytes"
+	"context"
+	"net/http"
+	"os/exec"
+	"strconv"
+	"vkbot/core"
+
+	"github.com/SevereCloud/vksdk/v2/events"
+)
+
+func Register() core.Command {
+	return core.Command{
+		Aliases:     []string{"бассбуст", "пушечка"},
+		Description: "инструмент для бассбуста",
+		Handler:     handle,
+		QueueName:   "audio",
+	}
+}
+
+func handle(_ *context.Context, obj *events.MessageNewObject) {
+	args := core.ExtractArguments(obj)
+
+	bass := "30"
+	treble := "5"
+
+	if len(args) == 2 {
+		bass = args[0]
+		treble = args[1]
+
+		if _, err := strconv.Atoi(bass); err != nil {
+			core.ReplySimple(obj, "ошибка: недопустимое значение нижней частоты")
+
+			return
+		}
+
+		if _, err := strconv.Atoi(treble); err != nil {
+			core.ReplySimple(obj, "ошибка: недопустимое значение верхней частоты")
+
+			return
+		}
+	}
+
+	atts := core.ExtractAttachments(obj)
+
+	if len(atts) == 0 {
+		core.ReplySimple(obj, core.ERR_NO_AUDIO)
+
+		return
+	}
+
+	attachment := atts[0]
+	if attachment.Type != "audio" {
+		core.ReplySimple(obj, core.ERR_NO_AUDIO)
+
+		return
+	}
+
+	if attachment.Audio.Duration > 10*60 {
+		core.ReplySimple(obj, "ошибка: аудиозапись не может быть длинее 10 минут")
+
+		return
+	}
+
+	response, err := http.Get(attachment.Audio.URL)
+
+	if err != nil {
+		core.ReplySimple(obj, core.ERR_UNKNOWN)
+
+		return
+	}
+
+	buffbass := bytes.Buffer{}
+	cmdbass := exec.Command("ffmpeg", "-i", "-", "-af", "bass=g="+bass, "-f", "mp3", "-")
+
+	cmdbass.Stdin = response.Body
+	cmdbass.Stdout = &buffbass
+
+	if cmdbass.Run() != nil {
+		core.ReplySimple(obj, core.ERR_UNKNOWN)
+
+		return
+	}
+
+	bufftreble := bytes.Buffer{}
+	cmdtreble := exec.Command("ffmpeg", "-i", "-", "-af", "treble=g="+treble, "-f", "mp3", "-")
+
+	cmdtreble.Stdin = &buffbass
+	cmdtreble.Stdout = &bufftreble
+
+	if cmdtreble.Run() != nil {
+		core.ReplySimple(obj, core.ERR_UNKNOWN)
+
+		return
+	}
+
+	d, err := UploadAudio(&attachment.Audio, &bufftreble)
+	if err != nil {
+		core.ReplySimple(obj, core.ERR_UNKNOWN)
+
+		return
+	}
+
+	r := (*d).(map[string]interface{})
+
+	err = core.ReplySimple(obj, "ваша аудиозапись:",
+		"audio"+
+			strconv.FormatInt(int64(r["owner_id"].(float64)), 10)+
+			"_"+
+			strconv.FormatInt(int64(r["id"].(float64)), 10),
+	)
+}

@@ -13,13 +13,13 @@ import (
 
 func progress(_ *context.Context, obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
-	if len(args) < 2 {
+	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: необходимо указать количество дней")
 
 		return
 	}
 
-	days, err := strconv.Atoi(args[1])
+	days, err := strconv.Atoi(args[0])
 	if err != nil || days < 1 {
 		core.ReplySimple(obj, "ошибка: недопустимое значение количества дней")
 

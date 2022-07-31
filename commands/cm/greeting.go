@@ -22,7 +22,7 @@ func greeting(_ *context.Context, obj *events.MessageNewObject) {
 	s := core.GetStorage()
 	key := fmt.Sprintf("greetings.%d", obj.Message.PeerID)
 
-	args := core.ExtractArguments(obj)[1:]
+	args := core.ExtractArguments(obj)
 	if len(args) == 0 {
 		msg, err := s.Db.Get(s.Ctx, key).Result()
 		if msg == "" || err != nil {

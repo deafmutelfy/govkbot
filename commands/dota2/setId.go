@@ -11,13 +11,13 @@ import (
 
 func setId(_ *context.Context, obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
-	if len(args) < 2 {
+	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: необходимо указать свой ID (циферный идентификатор, его можно взять непосредственно в игре, либо на Dotabuff)")
 
 		return
 	}
 
-	id, err := strconv.Atoi(args[1])
+	id, err := strconv.Atoi(args[0])
 	if err != nil {
 		core.ReplySimple(obj, "ошибка: недопустимый ID")
 

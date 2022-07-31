@@ -16,4 +16,5 @@ type Command struct {
 	Subcommands *[]Command
 	Hidden      bool
 	NoPrefix    bool
+	QueueName   string
 }

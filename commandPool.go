@@ -3,6 +3,7 @@ package main
 import (
 	"vkbot/commands/actions"
 	"vkbot/commands/base"
+	"vkbot/commands/bassboost"
 	"vkbot/commands/cm"
 	"vkbot/commands/commemoration"
 	"vkbot/commands/curse"
@@ -40,5 +41,6 @@ func commandPool() []core.Command {
 		base.Register(),
 		actions.Register(),
 		cm.Register(),
+		bassboost.Register(),
 	}
 }

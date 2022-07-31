@@ -15,6 +15,7 @@ var storageInstance *Storage = nil
 type Storage struct {
 	Cfg         Config
 	Vk          *api.VK
+	UserVk      *api.VK
 	Db          *redis.Client
 	Ctx         context.Context
 	CommandPool *[]Command

@@ -9,6 +9,8 @@ require (
 	github.com/dghubble/sling v1.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-redis/redis/v9 v9.0.0-beta.1 // indirect
+	github.com/goccy/go-json v0.9.7 // indirect
+	github.com/golang-queue/queue v0.1.3 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/ilyakaznacheev/cleanenv v1.3.0 // indirect
 	github.com/insomnyawolf/Gonnachan v0.0.0-20200830223750-65710b75cfb7 // indirect

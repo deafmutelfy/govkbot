@@ -149,3 +149,13 @@ func Remove[T comparable](l []T, item T) []T {
 	}
 	return l
 }
+
+func IsInArray[T comparable](l []T, item T) bool {
+	for _, x := range l {
+		if x == item {
+			return true
+		}
+	}
+
+	return false
+}
