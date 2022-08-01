@@ -58,6 +58,11 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 
 		return
 	}
+	if attachment.Audio.URL == "" {
+		core.ReplySimple(obj, "ошибка: эту аудиозапись невозможно обработать в беседах. Воспользуйтесь командой в личных сообщениях с ботом")
+
+		return
+	}
 
 	response, err := http.Get(attachment.Audio.URL)
 
