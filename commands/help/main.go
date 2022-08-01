@@ -2,17 +2,12 @@ package help
 
 import (
 	"context"
-	"strings"
-	"sync"
 	"vkbot/core"
 
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-const repo_url = "https://github.com/deafmutelfy/govkbot"
-
-var msg string = "список команд:\n"
-var once sync.Once
+const doc_url = "https://vkbot.deafmute.xyz"
 
 func Register() core.Command {
 	return core.Command{
@@ -23,28 +18,5 @@ func Register() core.Command {
 }
 
 func handle(_ *context.Context, obj *events.MessageNewObject) {
-	once.Do(func() {
-		for _, x := range *core.GetStorage().CommandPool {
-			if x.Hidden {
-				continue
-			}
-
-			aliases := []string{}
-
-			for _, v := range x.Aliases {
-				prefix := "/"
-				if x.NoPrefix {
-					prefix = ""
-				}
-
-				aliases = append(aliases, prefix+v)
-			}
-
-			msg += strings.Join(aliases, ", ") + " - " + x.Description + "\n"
-		}
-
-		msg += "\nИсходный код: " + repo_url
-	})
-
-	core.ReplySimple(obj, msg)
+	core.ReplySimple(obj, "документация по боту находится здесь: "+doc_url)
 }

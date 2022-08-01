@@ -22,6 +22,7 @@ func Register() core.Command {
 				Aliases:     []string{"прогресс"},
 				Description: "получить изменение MMR за определенное количество дней (без учёта смурф пула)",
 				Handler:     progress,
+				Hidden:    true,
 			},
 		},
 	}
