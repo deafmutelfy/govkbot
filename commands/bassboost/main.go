@@ -43,7 +43,7 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 		}
 	}
 
-	atts := core.ExtractAttachments(obj)
+	atts := core.ExtractAttachments(obj, "audio")
 
 	if len(atts) == 0 {
 		core.ReplySimple(obj, core.ERR_NO_AUDIO)
@@ -52,11 +52,6 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 	}
 
 	attachment := atts[0]
-	if attachment.Type != "audio" {
-		core.ReplySimple(obj, core.ERR_NO_AUDIO)
-
-		return
-	}
 
 	if attachment.Audio.Duration > 10*60 {
 		core.ReplySimple(obj, "ошибка: аудиозапись не может быть длинее 10 минут")

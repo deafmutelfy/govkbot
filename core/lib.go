@@ -101,7 +101,7 @@ func ExtractArguments(obj *events.MessageNewObject) []string {
 	return strings.Split(obj.Message.Text, " ")[1:]
 }
 
-func ExtractAttachments(obj *events.MessageNewObject) []object.MessagesMessageAttachment {
+func ExtractAttachments(obj *events.MessageNewObject, t ...string) []object.MessagesMessageAttachment {
 	res := obj.Message.Attachments
 
 	if obj.Message.ReplyMessage != nil {
@@ -110,6 +110,18 @@ func ExtractAttachments(obj *events.MessageNewObject) []object.MessagesMessageAt
 
 	for _, x := range obj.Message.FwdMessages {
 		res = append(res, x.Attachments...)
+	}
+
+	if len(t) > 0 {
+		found := []object.MessagesMessageAttachment{}
+
+		for _, x := range res {
+			if x.Type == t[0] {
+				found = append(found, x)
+			}
+		}
+
+		return found
 	}
 
 	return res

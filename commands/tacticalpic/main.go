@@ -40,7 +40,7 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 		}
 	}
 
-	atts := core.ExtractAttachments(obj)
+	atts := core.ExtractAttachments(obj, "photo")
 	if len(atts) == 0 {
 		core.ReplySimple(obj, core.ERR_NO_PICTURE)
 
@@ -48,11 +48,6 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 	}
 
 	attachment := atts[0]
-	if attachment.Type != "photo" {
-		core.ReplySimple(obj, core.ERR_NO_PICTURE)
-
-		return
-	}
 
 	response, err := http.Get(attachment.Photo.MaxSize().URL)
 	if err != nil {
