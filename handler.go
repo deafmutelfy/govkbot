@@ -6,6 +6,7 @@ import (
 	"strings"
 	"vkbot/core"
 
+	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
 	"github.com/golang-queue/queue"
 )
@@ -66,17 +67,38 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 		queueIds = append(queueIds, obj.Message.FromID)
 		queueIdsMutex.Unlock()
 
+		b := params.NewMessagesSendBuilder()
+
+		b.DisableMentions(true)
+
+		d, _ := core.Send(&obj,
+				"[id"+
+				strconv.Itoa(obj.Message.FromID)+
+				"|"+
+				core.GetNickname(obj.Message.FromID)+
+				"], ваш запрос принят в обработку. Номер в очереди: "+
+				strconv.Itoa(q.SubmittedTasks()-q.FailureTasks()-q.SuccessTasks()-q.BusyWorkers()+1),
+				b)
+
 		queuePoolMutex.Lock()
 		q.QueueTask(func(_ context.Context) error {
 			x.Handler(&ctx, &obj)
 
+			queueIdsMutex.Lock()
 			queueIds = core.Remove(queueIds, obj.Message.FromID)
+			queueIdsMutex.Unlock()
+
+			bu := params.NewMessagesDeleteBuilder()
+
+			bu.PeerID(obj.Message.PeerID)
+			bu.ConversationMessageIDs([]int{d[0].ConversationMessageID})
+			bu.DeleteForAll(true)
+
+			s.Vk.MessagesDelete(bu.Params)
 
 			return nil
 		})
 		queuePoolMutex.Unlock()
-
-		core.ReplySimple(&obj, "ваш запрос принят в обработку. Номер в очереди: "+strconv.Itoa(q.SubmittedTasks()-q.FailureTasks()-q.SuccessTasks()-q.BusyWorkers()))
 	}
 
 	launched := false

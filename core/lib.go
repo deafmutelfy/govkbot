@@ -6,10 +6,19 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
 	"github.com/SevereCloud/vksdk/v2/object"
 )
+
+func Send(obj *events.MessageNewObject, msg string, b *params.MessagesSendBuilder) (api.MessagesSendUserIDsResponse, error){
+	b.Message(msg)
+	b.RandomID(0)
+	b.PeerIDs([]int{obj.Message.PeerID})
+
+	return GetStorage().Vk.MessagesSendPeerIDs(b.Params)
+}
 
 func ReplySimple(obj *events.MessageNewObject, msg string, attachment ...interface{}) error {
 	fromId := obj.Message.FromID
