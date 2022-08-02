@@ -38,7 +38,7 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 		return
 	}
 
-	targetcmd := tokens[0]
+	targetcmd := strings.ToLower(tokens[0])
 
 	launcher := func(x *core.Command) {
 		if x.QueueName == "" {
