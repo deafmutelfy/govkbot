@@ -3,6 +3,7 @@ package bassboost
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"net/http"
 	"os/exec"
 	"strconv"
@@ -96,7 +97,9 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	d, err := UploadAudio(&attachment.Audio, &bufftreble)
+	d, err := UploadAudio(&bufftreble, 
+		attachment.Audio.Artist, 
+		fmt.Sprintf("%s (bassboosted by deafmute bot, bass=%sdB treble=%sdB )", attachment.Audio.Title, bass, treble))
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
 

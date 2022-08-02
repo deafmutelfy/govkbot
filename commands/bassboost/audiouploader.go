@@ -5,11 +5,10 @@ import (
 	"vkbot/core"
 
 	"github.com/SevereCloud/vksdk/v2/api"
-	"github.com/SevereCloud/vksdk/v2/object"
 	"github.com/valyala/fastjson"
 )
 
-func UploadAudio(src *object.AudioAudio, out *bytes.Buffer) (*interface{}, error) {
+func UploadAudio(out *bytes.Buffer, artist string, title string) (*interface{}, error) {
 	s := core.GetStorage()
 
 	res := new(interface{})
@@ -41,8 +40,8 @@ func UploadAudio(src *object.AudioAudio, out *bytes.Buffer) (*interface{}, error
 		"server": server,
 		"audio":  string(audio),
 		"hash":   string(hash),
-		"artist": src.Artist,
-		"title":  src.Title + " (bassboosted by deafmute bot, vk.com/deafmutebot)",
+		"artist": artist,
+		"title":  title,
 	}); err != nil {
 		return nil, err
 	}
