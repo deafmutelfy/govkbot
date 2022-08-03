@@ -37,7 +37,7 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 		}
 	}
 
-		atts := core.ExtractAttachments(obj, "audio")
+	atts := core.ExtractAttachments(obj, "audio")
 
 	if len(atts) == 0 {
 		core.ReplySimple(obj, core.ERR_NO_AUDIO)
@@ -90,8 +90,8 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	d, err := bassboost.UploadAudio(&buffreverb, 
-		attachment.Audio.Artist, 
+	d, err := bassboost.UploadAudio(&buffreverb,
+		attachment.Audio.Artist,
 		fmt.Sprintf("%s (slowed and reverbed by deafmute bot, ratio=%s)", attachment.Audio.Title, ratio))
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)

@@ -72,13 +72,13 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 		b.DisableMentions(true)
 
 		d, _ := core.Send(&obj,
-				"[id"+
+			"[id"+
 				strconv.Itoa(obj.Message.FromID)+
 				"|"+
 				core.GetNickname(obj.Message.FromID)+
 				"], ваш запрос принят в обработку. Номер в очереди: "+
 				strconv.Itoa(q.SubmittedTasks()-q.FailureTasks()-q.SuccessTasks()-q.BusyWorkers()+1),
-				b)
+			b)
 
 		queuePoolMutex.Lock()
 		q.QueueTask(func(_ context.Context) error {
@@ -106,10 +106,6 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 	for _, x := range *cmds {
 		for _, a := range x.Aliases {
 			if (((targetcmd == a) && (x.NoPrefix || parentcmd != nil)) || ((targetcmd[1:] == a) && (!x.NoPrefix))) && !x.Hidden {
-				if (targetcmd[1:] == a) && (!x.NoPrefix) && parentcmd == nil {
-					targetcmd = targetcmd[1:]
-				}
-
 				if !x.Metacommand {
 					launcher(&x)
 				} else {
@@ -119,6 +115,8 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 				}
 
 				launched = true
+
+				return
 			}
 		}
 	}
