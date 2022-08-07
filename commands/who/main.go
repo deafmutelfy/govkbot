@@ -1,7 +1,6 @@
 package who
 
 import (
-	"context"
 	"errors"
 	"math/rand"
 	"strconv"
@@ -21,7 +20,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	desc := strings.Join(core.ExtractArguments(obj), " ")
 
 	if desc == "" {

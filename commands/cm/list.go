@@ -1,13 +1,12 @@
 package cm
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 	"vkbot/core"
-	"vkbot/core/rolesystem"
+	"vkbot/subsystems/rolesystem"
 
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/api/params"
@@ -21,7 +20,7 @@ func extractId(key string) int {
 	return idint
 }
 
-func listrole(_ *context.Context, obj *events.MessageNewObject) {
+func listrole(obj *events.MessageNewObject) {
 	if err := cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 

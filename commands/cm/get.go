@@ -1,15 +1,14 @@
 package cm
 
 import (
-	"context"
 	"fmt"
 	"vkbot/core"
-	"vkbot/core/rolesystem"
+	"vkbot/subsystems/rolesystem"
 
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func getrole(_ *context.Context, obj *events.MessageNewObject) {
+func getrole(obj *events.MessageNewObject) {
 	s := core.GetStorage()
 
 	initialized, _ := s.Db.Get(s.Ctx, fmt.Sprintf("roles.%d.initialized", obj.Message.PeerID)).Result()

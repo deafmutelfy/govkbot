@@ -2,7 +2,6 @@ package tacticalpic
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"io"
 	"math/rand"
@@ -27,7 +26,7 @@ func list(obj *events.MessageNewObject) {
 
 const bubble_height_default = 260
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 

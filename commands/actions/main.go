@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -20,7 +19,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	s := core.GetStorage()
 
 	if obj.Message.PeerID == obj.Message.FromID {

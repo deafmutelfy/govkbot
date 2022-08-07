@@ -1,7 +1,6 @@
 package top
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -22,7 +21,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	name := strings.Join(core.ExtractArguments(obj), " ")
 
 	if name == "" {

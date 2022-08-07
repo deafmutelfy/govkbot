@@ -1,7 +1,6 @@
 package tts
 
 import (
-	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -46,7 +45,7 @@ func getgTTSReader(text, lang string) (io.Reader, error) {
 	return response.Body, nil
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	txt := strings.Join(core.ExtractArguments(obj), " ")
 
 	if txt == "" {

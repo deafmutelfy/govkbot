@@ -1,7 +1,6 @@
 package rule34
 
 import (
-	"context"
 	"math/rand"
 	"net/http"
 	"vkbot/core"
@@ -19,7 +18,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	tags := core.ExtractArguments(obj)
 
 	if len(tags) == 0 {

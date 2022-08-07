@@ -42,18 +42,18 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 	targetcmd := strings.ToLower(tokens[0])
 
 	launcher := func(x *core.Command) {
-		if x.QueueName == "" {
-			go x.Handler(&ctx, &obj)
+		if x.Queue == nil {
+			go x.Handler(&obj)
 
 			return
 		}
 
-		q, ok := queuePool[x.QueueName]
+		q, ok := queuePool[x.Queue.Name]
 		if !ok {
 			q = queue.NewPool(3)
 
 			queuePoolMutex.Lock()
-			queuePool[x.QueueName] = q
+			queuePool[x.Queue.Name] = q
 			queuePoolMutex.Unlock()
 		}
 
@@ -82,7 +82,7 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 
 		queuePoolMutex.Lock()
 		q.QueueTask(func(_ context.Context) error {
-			x.Handler(&ctx, &obj)
+			x.Handler(&obj)
 
 			queueIdsMutex.Lock()
 			queueIds = core.Remove(queueIds, obj.Message.FromID)

@@ -1,7 +1,6 @@
 package nick
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"unicode/utf8"
@@ -18,7 +17,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	nickname := strings.Join(core.ExtractArguments(obj), " ")
 
 	if nickname == "" {

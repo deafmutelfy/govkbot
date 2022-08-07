@@ -2,12 +2,12 @@ package bassboost
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"net/http"
 	"os/exec"
 	"strconv"
 	"vkbot/core"
+	"vkbot/subsystems/audiosystem"
 
 	"github.com/SevereCloud/vksdk/v2/events"
 )
@@ -17,11 +17,13 @@ func Register() core.Command {
 		Aliases:     []string{"бассбуст", "пушечка"},
 		Description: "инструмент для бассбуста",
 		Handler:     handle,
-		QueueName:   "audio",
+		Queue: &core.CommandQueueParams{
+			Name: "audio",
+		},
 	}
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
 
 	bass := "30"
@@ -97,7 +99,7 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	d, err := UploadAudio(&bufftreble,
+	d, err := audiosystem.UploadAudio(&bufftreble,
 		attachment.Audio.Artist,
 		fmt.Sprintf("%s (bassboosted by deafmute bot, bass=%sdB treble=%sdB)", attachment.Audio.Title, bass, treble))
 	if err != nil {

@@ -1,7 +1,6 @@
 package dota2
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -11,7 +10,7 @@ import (
 	"github.com/jasonodonnell/go-opendota"
 )
 
-func progress(_ *context.Context, obj *events.MessageNewObject) {
+func progress(obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
 	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: необходимо указать количество дней")

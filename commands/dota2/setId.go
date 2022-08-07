@@ -1,7 +1,6 @@
 package dota2
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"vkbot/core"
@@ -9,7 +8,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func setId(_ *context.Context, obj *events.MessageNewObject) {
+func setId(obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
 	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: необходимо указать свой ID (циферный идентификатор, его можно взять непосредственно в игре, либо на Dotabuff)")

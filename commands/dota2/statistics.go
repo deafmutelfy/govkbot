@@ -1,7 +1,6 @@
 package dota2
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -86,7 +85,7 @@ func statisticsGenMsg(accId int64) string {
 	return msg
 }
 
-func statistics(_ *context.Context, obj *events.MessageNewObject) {
+func statistics(obj *events.MessageNewObject) {
 	s := core.GetStorage()
 
 	id, err := s.Db.Get(s.Ctx, fmt.Sprintf("dota2.%d.id", obj.Message.FromID)).Result()

@@ -1,15 +1,14 @@
 package cm
 
 import (
-	"context"
 	"fmt"
 	"vkbot/core"
-	"vkbot/core/rolesystem"
+	"vkbot/subsystems/rolesystem"
 
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func setrole(_ *context.Context, obj *events.MessageNewObject, targetRole int) {
+func setrole(obj *events.MessageNewObject, targetRole int) {
 	if err := cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 

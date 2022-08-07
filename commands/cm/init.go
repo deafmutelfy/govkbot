@@ -1,19 +1,18 @@
 package cm
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"strconv"
 	"vkbot/core"
-	"vkbot/core/rolesystem"
+	"vkbot/subsystems/rolesystem"
 
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func initrole(_ *context.Context, obj *events.MessageNewObject) {
+func initrole(obj *events.MessageNewObject) {
 	if err := cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 

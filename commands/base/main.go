@@ -1,7 +1,6 @@
 package base
 
 import (
-	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -53,7 +52,7 @@ func list(obj *events.MessageNewObject) {
 	core.ReplySimple(obj, msg)
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
 	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: не указан источник. Список доступных источников можно получить командой \"/база лист\"")

@@ -2,13 +2,12 @@ package slowreverb
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"net/http"
 	"os/exec"
 	"strconv"
-	"vkbot/commands/bassboost"
 	"vkbot/core"
+	"vkbot/subsystems/audiosystem"
 
 	"github.com/SevereCloud/vksdk/v2/events"
 )
@@ -18,11 +17,13 @@ func Register() core.Command {
 		Aliases:     []string{"зр", "слоуреверб"},
 		Description: "наложить замедление и реверберацию на аудиозапись",
 		Handler:     handle,
-		QueueName:   "audio",
+		Queue: &core.CommandQueueParams{
+			Name: "audio",
+		},
 	}
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
 
 	ratio := "0.75"
@@ -90,7 +91,7 @@ func handle(_ *context.Context, obj *events.MessageNewObject) {
 		return
 	}
 
-	d, err := bassboost.UploadAudio(&buffreverb,
+	d, err := audiosystem.UploadAudio(&buffreverb,
 		attachment.Audio.Artist,
 		fmt.Sprintf("%s (slowed and reverbed by deafmute bot, ratio=%s)", attachment.Audio.Title, ratio))
 	if err != nil {

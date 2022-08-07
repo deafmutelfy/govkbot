@@ -1,18 +1,17 @@
 package cm
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"vkbot/core"
-	"vkbot/core/rolesystem"
+	"vkbot/subsystems/rolesystem"
 
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
 const GREETING_DEFAULT = "добро пожаловать!"
 
-func greeting(_ *context.Context, obj *events.MessageNewObject) {
+func greeting(obj *events.MessageNewObject) {
 	if err := cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 

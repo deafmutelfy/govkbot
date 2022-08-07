@@ -1,10 +1,9 @@
 package cm
 
 import (
-	"context"
 	"errors"
 	"vkbot/core"
-	"vkbot/core/rolesystem"
+	"vkbot/subsystems/rolesystem"
 
 	"github.com/SevereCloud/vksdk/v2/events"
 )
@@ -38,22 +37,22 @@ func Register() core.Command {
 			{
 				Aliases:     []string{"админ"},
 				Description: "выдать роль администратора пользователю",
-				Handler: func(ctx *context.Context, obj *events.MessageNewObject) {
-					setrole(ctx, obj, rolesystem.ROLE_ADMINISTRATOR)
+				Handler: func(obj *events.MessageNewObject) {
+					setrole(obj, rolesystem.ROLE_ADMINISTRATOR)
 				},
 			},
 			{
 				Aliases:     []string{"модератор"},
 				Description: "выдать роль модератора пользователю",
-				Handler: func(ctx *context.Context, obj *events.MessageNewObject) {
-					setrole(ctx, obj, rolesystem.ROLE_MODERATOR)
+				Handler: func(obj *events.MessageNewObject) {
+					setrole(obj, rolesystem.ROLE_MODERATOR)
 				},
 			},
 			{
 				Aliases:     []string{"снять"},
 				Description: "отозвать роль пользователя",
-				Handler: func(ctx *context.Context, obj *events.MessageNewObject) {
-					setrole(ctx, obj, rolesystem.ROLE_MEMBER)
+				Handler: func(obj *events.MessageNewObject) {
+					setrole(obj, rolesystem.ROLE_MEMBER)
 				},
 			},
 			{

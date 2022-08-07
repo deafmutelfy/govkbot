@@ -2,7 +2,6 @@ package curse
 
 import (
 	"bytes"
-	"context"
 	"io"
 	"net/http"
 	"vkbot/core"
@@ -19,7 +18,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(_ *context.Context, obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 

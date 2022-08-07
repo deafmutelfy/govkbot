@@ -1,12 +1,15 @@
 package core
 
 import (
-	"context"
-
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-type CommandHandler func(ctx *context.Context, obj *events.MessageNewObject)
+type CommandHandler func(obj *events.MessageNewObject)
+
+type CommandQueueParams struct {
+	Name    string
+	Handler CommandHandler
+}
 
 type Command struct {
 	Aliases     []string
@@ -16,5 +19,5 @@ type Command struct {
 	Subcommands *[]Command
 	Hidden      bool
 	NoPrefix    bool
-	QueueName   string
+	Queue       *CommandQueueParams
 }

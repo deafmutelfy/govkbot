@@ -1,4 +1,4 @@
-package bassboost
+package audiosystem
 
 import (
 	"bytes"

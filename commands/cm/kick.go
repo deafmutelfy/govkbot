@@ -1,10 +1,9 @@
 package cm
 
 import (
-	"context"
 	"errors"
 	"vkbot/core"
-	"vkbot/core/rolesystem"
+	"vkbot/subsystems/rolesystem"
 
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/api/params"
@@ -12,7 +11,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/object"
 )
 
-func kick(_ *context.Context, obj *events.MessageNewObject) {
+func kick(obj *events.MessageNewObject) {
 	if err := cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 
