@@ -10,6 +10,7 @@ import (
 	"vkbot/commands/dota2"
 	"vkbot/commands/help"
 	"vkbot/commands/linus"
+	"vkbot/commands/mashup"
 	"vkbot/commands/nick"
 	"vkbot/commands/online"
 	"vkbot/commands/ping"
@@ -44,5 +45,6 @@ func commandPool() []core.Command {
 		cm.Register(),
 		bassboost.Register(),
 		slowreverb.Register(),
+		mashup.Register(),
 	}
 }
