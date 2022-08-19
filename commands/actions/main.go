@@ -54,7 +54,7 @@ func handle(obj *events.MessageNewObject) {
 	}
 
 	action := ""
-	switch strings.Split(obj.Message.Text, " ")[0] {
+	switch strings.ToLower(strings.Split(obj.Message.Text, " ")[0]) {
 	case "обнять":
 		action = "обнял" + postfix + " ❤"
 	case "поцеловать":
