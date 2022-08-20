@@ -15,6 +15,11 @@ func Register() core.Command {
 				Description: "создать РП-команду",
 				Handler:     create,
 			},
+			{
+				Aliases:     []string{"лист"},
+				Description: "получить список созданных вами команд",
+				Handler:     list,
+			},
 		},
 	}
 }

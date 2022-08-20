@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
 	"strings"
 	"vkbot/commands/cm"
@@ -37,24 +36,36 @@ func handleUserRPAction(obj *events.MessageNewObject) {
 		return
 	}
 
+	enabled, _ := s.Db.Get(s.Ctx, fmt.Sprintf("rp.%d.enabled", obj.Message.PeerID)).Result()
+	if enabled == "false" {
+		return
+	}
+
 	action, err := s.Db.Get(s.Ctx, fmt.Sprintf("customrp.%d.%s", obj.Message.FromID, msg)).Result()
 	if err != nil || action == "" {
 		return
 	}
 
-	me := regexp.MustCompile(`(?i)(?:\A|)я(?:||\z)`)
-	target := regexp.MustCompile(`(?i)(?:\A|)цель(?:||\z)`)
+	n1 := core.GetNicknameOrFullName(obj.Message.FromID)
+	n2 := core.GetNicknameOrFullName(id)
 
-	action = me.ReplaceAllString(action, "[id"+
-		strconv.Itoa(obj.Message.FromID)+
-		"|"+
-		core.GetNicknameOrFullName(obj.Message.FromID)+
-		"] ")
-	action = target.ReplaceAllString(action, "[id"+
-		strconv.Itoa(id)+
-		"|"+
-		core.GetNicknameOrFullName(id)+
-		"]")
+	tmp := strings.Split(action, " ")
+	for k, x := range tmp {
+		if x == "я" {
+			tmp[k] = "[id" +
+				strconv.Itoa(obj.Message.FromID) +
+				"|" +
+				n1 +
+				"]"
+		}
+		if x == "цель" {
+			tmp[k] = "[id" +
+				strconv.Itoa(id) +
+				"|" +
+				n2 +
+				"]"
+		}
+	}
 
-	core.SendSimple(obj, action)
+	core.SendSimple(obj, "* "+strings.Join(tmp, " "))
 }

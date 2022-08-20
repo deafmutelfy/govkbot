@@ -65,7 +65,7 @@ func handle(obj *events.MessageNewObject) {
 
 	b.Fields([]string{})
 
-	core.SendSimple(obj, "[id"+
+	core.SendSimple(obj, "* [id"+
 		strconv.Itoa(obj.Message.FromID)+
 		"|"+
 		core.GetNicknameOrFullName(obj.Message.FromID)+
