@@ -14,6 +14,7 @@ import (
 	"vkbot/commands/nick"
 	"vkbot/commands/online"
 	"vkbot/commands/ping"
+	"vkbot/commands/rptool"
 	"vkbot/commands/rule34"
 	"vkbot/commands/slowreverb"
 	"vkbot/commands/soyjack"
@@ -46,5 +47,6 @@ func commandPool() []core.Command {
 		bassboost.Register(),
 		slowreverb.Register(),
 		mashup.Register(),
+		rptool.Register(),
 	}
 }

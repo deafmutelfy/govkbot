@@ -1,0 +1,20 @@
+package rptool
+
+import (
+	"vkbot/core"
+)
+
+func Register() core.Command {
+	return core.Command{
+		Aliases:     []string{"рп"},
+		Description: "управление пользовательскими РП-командами",
+		Metacommand: true,
+		Subcommands: &[]core.Command{
+			{
+				Aliases:     []string{"создать"},
+				Description: "создать РП-команду",
+				Handler:     create,
+			},
+		},
+	}
+}

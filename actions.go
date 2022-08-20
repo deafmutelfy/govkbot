@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"regexp"
+	"strconv"
 	"vkbot/commands/cm"
 	"vkbot/core"
 
@@ -22,4 +24,34 @@ func handleChatInviteUser(obj *events.MessageNewObject) {
 
 	obj.Message.FromID = obj.Message.Action.MemberID
 	core.ReplySimple(obj, msg)
+}
+
+func handleUserRPAction(obj *events.MessageNewObject) {
+	s := core.GetStorage()
+
+	id := core.GetMention(obj)
+	if id <= 0 {
+		return
+	}
+
+	action, err := s.Db.Get(s.Ctx, fmt.Sprintf("customrp.%d.%s", obj.Message.FromID, obj.Message.Text)).Result()
+	if err != nil || action == "" {
+		return
+	}
+
+	me := regexp.MustCompile(`(?i)(?:\A|)я(?:||\z)`)
+	target := regexp.MustCompile(`(?i)(?:\A|)цель(?:||\z)`)
+
+	action = me.ReplaceAllString(action, "[id"+
+		strconv.Itoa(obj.Message.FromID)+
+		"|"+
+		core.GetNicknameOrFullName(obj.Message.FromID)+
+		"] ")
+	action = target.ReplaceAllString(action, "[id"+
+		strconv.Itoa(id)+
+		"|"+
+		core.GetNicknameOrFullName(id)+
+		"]")
+
+	core.SendSimple(obj, action)
 }

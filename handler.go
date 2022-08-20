@@ -124,4 +124,6 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 	if !launched && parentcmd != nil {
 		core.ReplySimple(&obj, generateHelp(parentcmd.Aliases[0], cmds))
 	}
+
+	handleUserRPAction(&obj)
 }
