@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 	"vkbot/commands/cm"
 	"vkbot/core"
 
@@ -29,12 +30,14 @@ func handleChatInviteUser(obj *events.MessageNewObject) {
 func handleUserRPAction(obj *events.MessageNewObject) {
 	s := core.GetStorage()
 
+	msg := strings.ToLower(obj.Message.Text)
+
 	id := core.GetMention(obj)
 	if id <= 0 {
 		return
 	}
 
-	action, err := s.Db.Get(s.Ctx, fmt.Sprintf("customrp.%d.%s", obj.Message.FromID, obj.Message.Text)).Result()
+	action, err := s.Db.Get(s.Ctx, fmt.Sprintf("customrp.%d.%s", obj.Message.FromID, msg)).Result()
 	if err != nil || action == "" {
 		return
 	}
