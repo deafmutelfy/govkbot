@@ -8,6 +8,7 @@ import (
 	"vkbot/core"
 
 	"github.com/SevereCloud/vksdk/v2/events"
+	"github.com/dlclark/regexp2"
 )
 
 func handleChatInviteUser(obj *events.MessageNewObject) {
@@ -49,23 +50,22 @@ func handleUserRPAction(obj *events.MessageNewObject) {
 	n1 := core.GetNicknameOrFullName(obj.Message.FromID)
 	n2 := core.GetNicknameOrFullName(id)
 
-	tmp := strings.Split(action, " ")
-	for k, x := range tmp {
-		if x == "я" {
-			tmp[k] = "[id" +
+	action, err = regexp2.MustCompile(`(?i)\bя\b`, 0).Replace(action, "[id" +
 				strconv.Itoa(obj.Message.FromID) +
 				"|" +
 				n1 +
-				"]"
-		}
-		if x == "цель" {
-			tmp[k] = "[id" +
+				"]", 0, -1)
+	if err != nil {
+		return
+	}
+	action, err = regexp2.MustCompile(`(?i)\bцель\b`, 0).Replace(action, "[id" +
 				strconv.Itoa(id) +
 				"|" +
 				n2 +
-				"]"
-		}
+				"]", 0, -1)
+	if err != nil {
+		return
 	}
 
-	core.SendSimple(obj, "* "+strings.Join(tmp, " "))
+	core.SendSimple(obj, action)
 }

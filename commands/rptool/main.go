@@ -25,6 +25,11 @@ func Register() core.Command {
 				Description: "удалить РП-команду",
 				Handler:     remove,
 			},
+			{
+				Aliases: []string{"очистить"},
+				Description: "удалить все созданные вами РП-команды",
+				Handler: clear,
+			},
 		},
 	}
 }
