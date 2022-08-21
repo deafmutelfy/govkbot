@@ -20,6 +20,11 @@ func Register() core.Command {
 				Description: "получить список созданных вами команд",
 				Handler:     list,
 			},
+			{
+				Aliases:     []string{"удалить"},
+				Description: "удалить РП-команду",
+				Handler:     remove,
+			},
 		},
 	}
 }

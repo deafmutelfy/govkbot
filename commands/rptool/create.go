@@ -11,12 +11,15 @@ import (
 func create(obj *events.MessageNewObject) {
 	args := core.ExtractArguments(obj)
 
-	trueargs := strings.Split(strings.Join(args, " "), ": ")
+	trueargs := strings.Split(strings.ToLower(strings.Join(args, " ")), ": ")
 	if len(trueargs) < 2 {
 		core.ReplySimple(obj, "ошибка: параметры не указаны или указаны неверно")
 
 		return
 	}
+
+	trueargs[0] = strings.Trim(trueargs[0], " ")
+	trueargs[1] = strings.Trim(trueargs[1], " ")
 
 	s := core.GetStorage()
 
