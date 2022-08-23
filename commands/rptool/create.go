@@ -19,7 +19,7 @@ func create(obj *events.MessageNewObject) {
 	}
 
 	trueargs[0] = strings.Trim(trueargs[0], " ")
-	trueargs[1] = strings.Trim(trueargs[1], " ")
+	trueargs[1] = strings.Trim(strings.Join(trueargs[1:], " "), " ")
 
 	s := core.GetStorage()
 

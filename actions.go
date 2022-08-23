@@ -50,22 +50,22 @@ func handleUserRPAction(obj *events.MessageNewObject) {
 	n1 := core.GetNicknameOrFullName(obj.Message.FromID)
 	n2 := core.GetNicknameOrFullName(id)
 
-	action, err = regexp2.MustCompile(`(?i)\bя\b`, 0).Replace(action, "[id" +
-				strconv.Itoa(obj.Message.FromID) +
-				"|" +
-				n1 +
-				"]", 0, -1)
+	action, err = regexp2.MustCompile(`(?i)\bя\b`, 0).Replace(action, "[id"+
+		strconv.Itoa(obj.Message.FromID)+
+		"|"+
+		n1+
+		"]", 0, -1)
 	if err != nil {
 		return
 	}
-	action, err = regexp2.MustCompile(`(?i)\bцель\b`, 0).Replace(action, "[id" +
-				strconv.Itoa(id) +
-				"|" +
-				n2 +
-				"]", 0, -1)
+	action, err = regexp2.MustCompile(`(?i)\bцель\b`, 0).Replace(action, "[id"+
+		strconv.Itoa(id)+
+		"|"+
+		n2+
+		"]", 0, -1)
 	if err != nil {
 		return
 	}
 
-	core.SendSimple(obj, action)
+	core.SendSimple(obj, "* "+action)
 }

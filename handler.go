@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"strings"
 	"vkbot/core"
@@ -13,6 +14,11 @@ import (
 
 func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Command) {
 	s := core.GetStorage()
+
+	isBlacklisted, _ := s.Db.Get(s.Ctx, fmt.Sprintf("blacklist.%d", obj.Message.FromID)).Result()
+	if isBlacklisted == "true" {
+		return
+	}
 
 	cmds := s.CommandPool
 
