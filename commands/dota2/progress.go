@@ -10,7 +10,7 @@ import (
 	"github.com/jasonodonnell/go-opendota"
 )
 
-func progress(obj *events.MessageNewObject) {
+func progress(obj *events.MessageNewObject) (err error) {
 	args := core.ExtractArguments(obj)
 	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: необходимо указать количество дней")
@@ -84,4 +84,6 @@ func progress(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, msg)
+	
+	return
 }

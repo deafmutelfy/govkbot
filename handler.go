@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 	"vkbot/core"
@@ -49,7 +50,11 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 
 	launcher := func(x *core.Command) {
 		if x.Queue == nil {
-			go x.Handler(&obj)
+			go func () {
+				if err := x.Handler(&obj); err != nil {
+					log.Println(err)
+				}
+			}()
 
 			return
 		}
@@ -88,7 +93,9 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 
 		queuePoolMutex.Lock()
 		q.QueueTask(func(_ context.Context) error {
-			x.Handler(&obj)
+			if err := x.Handler(&obj); err != nil {
+				log.Println(err)
+			}
 
 			queueIdsMutex.Lock()
 			queueIds = core.Remove(queueIds, obj.Message.FromID)

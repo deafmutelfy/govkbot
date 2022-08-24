@@ -18,7 +18,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	tags := core.ExtractArguments(obj)
 
 	if len(tags) == 0 {
@@ -54,4 +54,6 @@ func handle(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "ваша картинка:", vkPhoto)
+
+	return
 }

@@ -23,7 +23,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	args := core.ExtractArguments(obj)
 
 	ratio := "0.75"
@@ -31,7 +31,7 @@ func handle(obj *events.MessageNewObject) {
 	if len(args) == 1 {
 		ratio = args[0]
 
-		if _, err := strconv.ParseFloat(ratio, 32); err != nil {
+		if _, err = strconv.ParseFloat(ratio, 32); err != nil {
 			core.ReplySimple(obj, "ошибка: недопустимое значение коэффицента замедления")
 
 			return
@@ -108,4 +108,6 @@ func handle(obj *events.MessageNewObject) {
 			"_"+
 			strconv.FormatInt(int64(r["id"].(float64)), 10),
 	)
+
+	return
 }

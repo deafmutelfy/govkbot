@@ -25,12 +25,13 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	args := core.ExtractArguments(obj)
 
 	p, err := parseParams(&args)
 	if err != nil {
 		core.ReplySimple(obj, fmt.Sprint("ошибка:", err))
+		err = nil
 
 		return
 	}
@@ -64,14 +65,14 @@ func handle(obj *events.MessageNewObject) {
 		if err != nil {
 			core.ReplySimple(obj, core.ERR_UNKNOWN)
 
-			return
+			return err
 		}
 
 		f, err := os.CreateTemp("", "govkbot-mashup-cache")
 		if err != nil {
 			core.ReplySimple(obj, core.ERR_UNKNOWN)
 
-			return
+			return err
 		}
 		defer os.Remove(f.Name())
 
@@ -131,4 +132,6 @@ func handle(obj *events.MessageNewObject) {
 			"_"+
 			strconv.FormatInt(int64(r["id"].(float64)), 10),
 	)
+
+	return
 }

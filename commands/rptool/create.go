@@ -8,7 +8,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func create(obj *events.MessageNewObject) {
+func create(obj *events.MessageNewObject) (err error) {
 	args := core.ExtractArguments(obj)
 
 	trueargs := strings.Split(strings.Join(args, " "), ": ")
@@ -26,4 +26,6 @@ func create(obj *events.MessageNewObject) {
 	s.Db.Set(s.Ctx, fmt.Sprintf("customrp.%d.%s", obj.Message.FromID, trueargs[0]), trueargs[1], 0)
 
 	core.ReplySimple(obj, "успешно")
+
+	return
 }

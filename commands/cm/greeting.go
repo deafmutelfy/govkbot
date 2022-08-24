@@ -11,8 +11,8 @@ import (
 
 const GREETING_DEFAULT = "добро пожаловать!"
 
-func greeting(obj *events.MessageNewObject) {
-	if err := cmInit(obj); err != nil {
+func greeting(obj *events.MessageNewObject) (err error) {
+	if err = cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 
 		return
@@ -29,8 +29,6 @@ func greeting(obj *events.MessageNewObject) {
 		}
 
 		core.ReplySimple(obj, "текущее приветствие: \""+msg+"\"")
-
-		return
 	}
 
 	if rolesystem.GetRole(obj) < rolesystem.ROLE_ADMINISTRATOR {
@@ -42,4 +40,6 @@ func greeting(obj *events.MessageNewObject) {
 	s.Db.Set(s.Ctx, key, strings.Join(args, " "), 0)
 
 	core.ReplySimple(obj, "успешно")
+
+	return
 }

@@ -26,7 +26,7 @@ func list(obj *events.MessageNewObject) {
 
 const bubble_height_default = 260
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 
@@ -106,4 +106,6 @@ func handle(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "ваша картинка:", vkPhoto)
+
+	return
 }

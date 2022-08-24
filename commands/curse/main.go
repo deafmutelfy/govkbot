@@ -18,7 +18,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	imagick.Initialize()
 	defer imagick.Terminate()
 
@@ -62,4 +62,6 @@ func handle(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "ваша картинка:", vkPhoto)
+
+	return
 }

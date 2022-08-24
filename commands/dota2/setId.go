@@ -8,7 +8,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func setId(obj *events.MessageNewObject) {
+func setId(obj *events.MessageNewObject) (err error) {
 	args := core.ExtractArguments(obj)
 	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: необходимо указать свой ID (циферный идентификатор, его можно взять непосредственно в игре, либо на Dotabuff)")
@@ -28,4 +28,6 @@ func setId(obj *events.MessageNewObject) {
 	s.Db.Set(s.Ctx, fmt.Sprintf("dota2.%d.id", obj.Message.FromID), id, 0)
 
 	core.ReplySimple(obj, "успешно")
+
+	return
 }

@@ -8,10 +8,16 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func getrole(obj *events.MessageNewObject) {
+func getrole(obj *events.MessageNewObject) (err error) {
+	if err = cmInit(obj); err != nil {
+		core.ReplySimple(obj, err.Error())
+
+		return
+	}
+	
 	s := core.GetStorage()
 
-	initialized, _ := s.Db.Get(s.Ctx, fmt.Sprintf("roles.%d.initialized", obj.Message.PeerID)).Result()
+	initialized, err := s.Db.Get(s.Ctx, fmt.Sprintf("roles.%d.initialized", obj.Message.PeerID)).Result()
 	if initialized != "true" {
 		core.ReplySimple(obj, core.ERR_NO_ROLESYSTEM)
 
@@ -34,4 +40,6 @@ func getrole(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "ваша роль: "+role)
+
+	return
 }

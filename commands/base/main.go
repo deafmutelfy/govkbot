@@ -21,7 +21,7 @@ func Register() core.Command {
 	}
 }
 
-func list(obj *events.MessageNewObject) {
+func list(obj *events.MessageNewObject) (err error) {
 	r, err := http.Get("https://" + bazman_uri + "/bases")
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
@@ -50,9 +50,11 @@ func list(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, msg)
+
+	return
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	args := core.ExtractArguments(obj)
 	if len(args) < 1 {
 		core.ReplySimple(obj, "ошибка: не указан источник. Список доступных источников можно получить командой \"/база лист\"")
@@ -60,12 +62,14 @@ func handle(obj *events.MessageNewObject) {
 		return
 	}
 	if args[0] == "лист" {
-		list(obj)
+		if err = list(obj); err != nil {
+			return
+		}
 
 		return
 	}
 
-	_, err := strconv.Atoi(args[0])
+	_, err = strconv.Atoi(args[0])
 	if err != nil {
 		core.ReplySimple(obj, "ошибка: недопустимый идентификатор источника")
 
@@ -102,4 +106,6 @@ func handle(obj *events.MessageNewObject) {
 	}
 
 	core.SendSimple(obj, string(b))
+	
+	return
 }

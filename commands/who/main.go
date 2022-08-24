@@ -20,7 +20,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	desc := strings.Join(core.ExtractArguments(obj), " ")
 
 	if desc == "" {
@@ -53,4 +53,6 @@ func handle(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "кто "+desc+"? Возможно, это [id"+strconv.Itoa(u.ID)+"|"+name+"]")
+
+	return
 }

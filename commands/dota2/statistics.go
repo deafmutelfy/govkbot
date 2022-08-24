@@ -25,20 +25,19 @@ func statisticsGetRank(p *opendota.Player) string {
 	return rank
 }
 
-func statisticsGenMsg(accId int64) string {
-	msg := ""
+func statisticsGenMsg(accId int64) (msg string, err error) {
 	client := opendota.NewClient(&http.Client{})
 
 	p, _, err := client.PlayerService.Player(accId)
 	if err != nil {
 		msg = core.ERR_UNKNOWN
 
-		return msg
+		return
 	}
 	if p.Profile.AccountID == 0 {
 		msg = "ошибка: информации по вашему ID не найдено. Установите идентификатор заново, или же, если ID верный, включите общедоступную историю матчей в настройках игры"
 
-		return msg
+		return 
 	}
 
 	msg += "\nНикнейм: " + p.Profile.Personaname
@@ -48,7 +47,7 @@ func statisticsGenMsg(accId int64) string {
 	if err != nil {
 		msg = core.ERR_UNKNOWN
 
-		return msg
+		return 
 	}
 
 	msg += "\n\nПобед: " + strconv.Itoa(wl.Win)
@@ -59,7 +58,7 @@ func statisticsGenMsg(accId int64) string {
 	if err != nil {
 		msg = core.ERR_UNKNOWN
 
-		return msg
+		return
 	}
 	hId, _ := strconv.Atoi(h[0].HeroID)
 
@@ -70,7 +69,7 @@ func statisticsGenMsg(accId int64) string {
 	if err != nil {
 		msg = core.ERR_UNKNOWN
 
-		return msg
+		return
 	}
 
 	msg += "\n\nПоследний матч:\n"
@@ -82,10 +81,10 @@ func statisticsGenMsg(accId int64) string {
 	msg += " - " + heroes[rm[0].HeroID-1]
 	msg += " - " + fmt.Sprintf("%d/%d/%d", rm[0].Kills, rm[0].Deaths, rm[0].Assists)
 
-	return msg
+	return
 }
 
-func statistics(obj *events.MessageNewObject) {
+func statistics(obj *events.MessageNewObject) (err error) {
 	s := core.GetStorage()
 
 	id, err := s.Db.Get(s.Ctx, fmt.Sprintf("dota2.%d.id", obj.Message.FromID)).Result()
@@ -97,5 +96,8 @@ func statistics(obj *events.MessageNewObject) {
 
 	numId, _ := strconv.ParseInt(id, 10, 64)
 
-	core.ReplySimple(obj, statisticsGenMsg(numId))
+	res, err := statisticsGenMsg(numId)
+	core.ReplySimple(obj, res)
+
+	return
 }

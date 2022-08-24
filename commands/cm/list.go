@@ -20,8 +20,8 @@ func extractId(key string) int {
 	return idint
 }
 
-func listrole(obj *events.MessageNewObject) {
-	if err := cmInit(obj); err != nil {
+func listrole(obj *events.MessageNewObject) (err error) {
+	if err = cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 
 		return
@@ -118,4 +118,6 @@ func listrole(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, msg)
+
+	return
 }

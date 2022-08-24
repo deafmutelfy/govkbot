@@ -18,7 +18,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	b := params.NewMessagesGetConversationMembersBuilder()
 
 	b.PeerID(obj.Message.PeerID)
@@ -51,4 +51,6 @@ func handle(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, txt)
+
+	return
 }

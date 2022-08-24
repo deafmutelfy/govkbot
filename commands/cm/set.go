@@ -8,8 +8,8 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func setrole(obj *events.MessageNewObject, targetRole int) {
-	if err := cmInit(obj); err != nil {
+func setrole(obj *events.MessageNewObject, targetRole int) (err error) {
+	if err = cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 
 		return
@@ -50,4 +50,6 @@ func setrole(obj *events.MessageNewObject, targetRole int) {
 	}
 
 	core.ReplySimple(obj, "успешно")
+
+	return
 }

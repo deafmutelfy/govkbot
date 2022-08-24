@@ -23,23 +23,23 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	args := core.ExtractArguments(obj)
 
-	bass := "30"
-	treble := "5"
+	bass := "10"
+	treble := "0"
 
 	if len(args) == 2 {
 		bass = args[0]
 		treble = args[1]
 
-		if _, err := strconv.Atoi(bass); err != nil {
+		if _, err = strconv.Atoi(bass); err != nil {
 			core.ReplySimple(obj, "ошибка: недопустимое значение нижней частоты")
 
 			return
 		}
 
-		if _, err := strconv.Atoi(treble); err != nil {
+		if _, err = strconv.Atoi(treble); err != nil {
 			core.ReplySimple(obj, "ошибка: недопустимое значение верхней частоты")
 
 			return
@@ -116,4 +116,6 @@ func handle(obj *events.MessageNewObject) {
 			"_"+
 			strconv.FormatInt(int64(r["id"].(float64)), 10),
 	)
+
+	return
 }

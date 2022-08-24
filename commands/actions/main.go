@@ -19,7 +19,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	s := core.GetStorage()
 
 	if obj.Message.PeerID == obj.Message.FromID {
@@ -76,4 +76,6 @@ func handle(obj *events.MessageNewObject) {
 		"|"+
 		core.GetNicknameOrFullName(id)+
 		"]")
+
+	return
 }

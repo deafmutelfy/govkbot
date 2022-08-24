@@ -17,7 +17,7 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	nickname := strings.Join(core.ExtractArguments(obj), " ")
 
 	if nickname == "" {
@@ -40,4 +40,6 @@ func handle(obj *events.MessageNewObject) {
 	s.Db.Set(s.Ctx, key+".initialized", "true", 0)
 
 	core.ReplySimple(obj, "успешно")
+
+	return
 }

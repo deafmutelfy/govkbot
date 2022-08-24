@@ -4,7 +4,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-type CommandHandler func(obj *events.MessageNewObject)
+type CommandHandler func(obj *events.MessageNewObject) error
 
 type CommandQueueParams struct {
 	Name    string

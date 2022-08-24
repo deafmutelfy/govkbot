@@ -19,7 +19,7 @@ func Register() core.Command {
 	}
 }
 
-func getgTTSReader(text, lang string) (io.Reader, error) {
+func getgTTSReader(text, lang string) (b io.Reader, err error) {
 	q := url.Values{}
 	q.Set("ie", "UTF-8")
 	q.Set("total", "1")
@@ -39,13 +39,15 @@ func getgTTSReader(text, lang string) (io.Reader, error) {
 
 	response, err := http.Get(u.String())
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	return response.Body, nil
+	b = response.Body
+
+	return
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	txt := strings.Join(core.ExtractArguments(obj), " ")
 
 	if txt == "" {
@@ -77,4 +79,6 @@ func handle(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "ваша озвучка:", m.AudioMessage)
+
+	return
 }

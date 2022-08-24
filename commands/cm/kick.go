@@ -11,8 +11,8 @@ import (
 	"github.com/SevereCloud/vksdk/v2/object"
 )
 
-func kick(obj *events.MessageNewObject) {
-	if err := cmInit(obj); err != nil {
+func kick(obj *events.MessageNewObject) (err error) {
+	if err = cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 
 		return
@@ -41,7 +41,7 @@ func kick(obj *events.MessageNewObject) {
 
 	s := core.GetStorage()
 
-	_, err := s.Vk.MessagesRemoveChatUser(b.Params)
+	_, err = s.Vk.MessagesRemoveChatUser(b.Params)
 
 	if errors.Is(err, api.ErrAccess) {
 		core.ReplySimple(obj, core.ERR_NO_ACCESS_TO_CHAT+", или этого пользователя невозможно исключить")
@@ -58,4 +58,6 @@ func kick(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "успешно")
+
+	return
 }

@@ -16,6 +16,8 @@ func Register() core.Command {
 	}
 }
 
-func handle(obj *events.MessageNewObject) {
+func handle(obj *events.MessageNewObject) (err error) {
 	core.ReplySimple(obj, "документация по боту находится здесь: "+doc_url)
+
+	return
 }

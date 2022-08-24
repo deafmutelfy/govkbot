@@ -8,8 +8,8 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func rp(obj *events.MessageNewObject) {
-	if err := cmInit(obj); err != nil {
+func rp(obj *events.MessageNewObject) (err error) {
+	if err = cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 
 		return
@@ -39,4 +39,6 @@ func rp(obj *events.MessageNewObject) {
 	s.Db.Set(s.Ctx, key, status, 0)
 
 	core.ReplySimple(obj, "успешно. RP команды теперь "+msgstatus+"ы")
+
+	return
 }

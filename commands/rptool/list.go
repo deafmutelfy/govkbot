@@ -9,7 +9,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func list(obj *events.MessageNewObject) {
+func list(obj *events.MessageNewObject) (err error) {
 	s := core.GetStorage()
 
 	keys, err := s.Db.Keys(s.Ctx, fmt.Sprintf("customrp.%d.*", obj.Message.FromID)).Result()
@@ -33,4 +33,6 @@ func list(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, msg)
+
+	return
 }

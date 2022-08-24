@@ -12,8 +12,8 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func initrole(obj *events.MessageNewObject) {
-	if err := cmInit(obj); err != nil {
+func initrole(obj *events.MessageNewObject) (err error) {
+	if err = cmInit(obj); err != nil {
 		core.ReplySimple(obj, err.Error())
 
 		return
@@ -84,4 +84,6 @@ func initrole(obj *events.MessageNewObject) {
 	s.Db.Set(s.Ctx, initializedKey, "true", 0)
 
 	core.ReplySimple(obj, txt)
+
+	return
 }

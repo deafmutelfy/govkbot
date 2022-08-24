@@ -8,7 +8,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func remove(obj *events.MessageNewObject) {
+func remove(obj *events.MessageNewObject) (err error) {
 	args := strings.Join(core.ExtractArguments(obj), " ")
 	if args == "" {
 		core.ReplySimple(obj, "ошибка: не указано название команды")
@@ -31,4 +31,6 @@ func remove(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "успешно")
+
+	return
 }

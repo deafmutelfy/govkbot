@@ -7,7 +7,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 )
 
-func clear(obj *events.MessageNewObject) {
+func clear(obj *events.MessageNewObject) (err error) {
 	s := core.GetStorage()
 
 	keys, err := s.Db.Keys(s.Ctx, fmt.Sprintf("customrp.%d.*", obj.Message.FromID)).Result()
@@ -27,4 +27,6 @@ func clear(obj *events.MessageNewObject) {
 	}
 
 	core.ReplySimple(obj, "успешно")
+
+	return
 }
