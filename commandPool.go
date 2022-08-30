@@ -22,6 +22,7 @@ import (
 	"vkbot/commands/top"
 	"vkbot/commands/tts"
 	"vkbot/commands/who"
+	"vkbot/commands/window"
 	"vkbot/core"
 )
 
@@ -48,5 +49,6 @@ func commandPool() []core.Command {
 		slowreverb.Register(),
 		mashup.Register(),
 		rptool.Register(),
+		window.Register(),
 	}
 }
