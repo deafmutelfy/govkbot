@@ -19,9 +19,6 @@ func Register() core.Command {
 }
 
 func handle(obj *events.MessageNewObject) (err error) {
-	imagick.Initialize()
-	defer imagick.Terminate()
-
 	atts := core.ExtractAttachments(obj, "photo")
 
 	if len(atts) == 0 {

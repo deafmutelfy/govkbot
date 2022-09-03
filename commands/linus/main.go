@@ -12,7 +12,12 @@ import (
 
 const linus_file_path = "commands/linus/linus.png"
 
+var mw *imagick.MagickWand
+
 func Register() core.Command {
+	mw = imagick.NewMagickWand()
+	mw.ReadImage(linus_file_path)
+
 	return core.Command{
 		Aliases:     []string{"линус"},
 		Description: "перенести картинку на конференцию с Линусом Торвальдсом",
@@ -21,9 +26,6 @@ func Register() core.Command {
 }
 
 func handle(obj *events.MessageNewObject) (err error) {
-	imagick.Initialize()
-	defer imagick.Terminate()
-
 	atts := core.ExtractAttachments(obj, "photo")
 
 	if len(atts) == 0 {
@@ -62,8 +64,7 @@ func handle(obj *events.MessageNewObject) (err error) {
 	mw1.SetImageVirtualPixelMethod(imagick.VIRTUAL_PIXEL_TRANSPARENT)
 	mw1.DistortImage(imagick.DISTORTION_PERSPECTIVE, mask, false)
 
-	mw2 := imagick.NewMagickWand()
-	mw2.ReadImage(linus_file_path)
+	mw2 := mw.Clone()
 	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 205, 0)
 
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(0, bytes.NewReader(mw2.GetImageBlob()))

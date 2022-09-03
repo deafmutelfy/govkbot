@@ -1,5 +1,7 @@
 package tacticalpic
 
+// легаси код ай донт рили вонт ту си зэт
+
 import (
 	"bytes"
 	"fmt"
@@ -27,9 +29,6 @@ func list(obj *events.MessageNewObject) {
 const bubble_height_default = 260
 
 func handle(obj *events.MessageNewObject) (err error) {
-	imagick.Initialize()
-	defer imagick.Terminate()
-
 	args := core.ExtractArguments(obj)
 	if len(args) > 0 {
 		if args[0] == "лист" {

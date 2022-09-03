@@ -12,7 +12,12 @@ import (
 
 const window_file_path = "commands/window/win.png"
 
+var mw *imagick.MagickWand
+
 func Register() core.Command {
+	mw = imagick.NewMagickWand()
+	mw.ReadImage(window_file_path)
+
 	return core.Command{
 		Aliases:     []string{"окно"},
 		Description: "перенести картинку на шаблон с окном",
@@ -21,9 +26,6 @@ func Register() core.Command {
 }
 
 func handle(obj *events.MessageNewObject) (err error) {
-	imagick.Initialize()
-	defer imagick.Terminate()
-
 	atts := core.ExtractAttachments(obj, "photo")
 	if len(atts) == 0 {
 		core.ReplySimple(obj, core.ERR_NO_PICTURE)
@@ -51,8 +53,7 @@ func handle(obj *events.MessageNewObject) (err error) {
 	mw1.ReadImageBlob(bt)
 	mw1.ResizeImage(701, 397, imagick.FILTER_UNDEFINED, 1)
 
-	mw2 := imagick.NewMagickWand()
-	mw2.ReadImage(window_file_path)
+	mw2 := mw.Clone()
 	mw2.CompositeLayers(mw1, imagick.COMPOSITE_OP_DST_OVER, 789, 153)
 
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(0, bytes.NewReader(mw2.GetImageBlob()))

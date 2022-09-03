@@ -14,10 +14,12 @@ import (
 	"github.com/SevereCloud/vksdk/v2/events"
 	"github.com/SevereCloud/vksdk/v2/longpoll-bot"
 	"github.com/go-redis/redis/v9"
+	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
+	imagick.Initialize()
 
 	s := core.GetStorage()
 	s.Cfg = core.Config{}
