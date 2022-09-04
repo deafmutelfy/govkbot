@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"vkbot/core"
+	"vkbot/subsystems/queuesystem"
 
 	"github.com/SevereCloud/vksdk/v2/events"
 	"gopkg.in/gographics/imagick.v2/imagick"
@@ -47,7 +48,7 @@ func Register() core.Command {
 }
 
 func handle(obj *events.MessageNewObject) (err error) {
-	atts := core.ExtractAttachments(obj, "photo")
+	atts := core.ExtractAttachments(obj, "photo,doc")
 	if len(atts) == 0 {
 		core.ReplySimple(obj, core.ERR_NO_PICTURE)
 
@@ -56,7 +57,20 @@ func handle(obj *events.MessageNewObject) (err error) {
 
 	attachment := atts[0]
 
-	response, err := http.Get(attachment.Photo.MaxSize().URL)
+	link := ""
+
+	switch attachment.Type {
+	case "photo":
+		link = attachment.Photo.MaxSize().URL
+	case "doc":
+		link = attachment.Doc.URL
+
+		if attachment.Doc.Size > 30*1024*1024 {
+			core.ReplySimple(obj, core.ERR_LARGE_GIF)
+		}
+	}
+
+	response, err := http.Get(link)
 	if err != nil {
 		core.ReplySimple(obj, core.ERR_UNKNOWN)
 
@@ -103,6 +117,46 @@ func handle(obj *events.MessageNewObject) (err error) {
 			PosX:   8,
 			PosY:   1249,
 		}
+	}
+
+	if attachment.Type == "doc" {
+		queuesystem.Add(obj, func(obj *events.MessageNewObject) (err error) {
+			aw := mw1.CoalesceImages()
+
+			mw2 := data.Wand.Clone()
+
+			for i := 0; i < int(aw.GetNumberImages()); i++ {
+				aw.SetIteratorIndex(i)
+				img := aw.GetImage()
+
+				img.ResizeImage(data.Width, data.Height, imagick.FILTER_UNDEFINED, 1)
+				img.SetImageVirtualPixelMethod(imagick.VIRTUAL_PIXEL_TRANSPARENT)
+				img.DistortImage(imagick.DISTORTION_PERSPECTIVE, data.Mask, false)
+				img.SetImagePage(0, 0, data.PosX, data.PosY)
+
+				mw2.AddImage(img)
+				img.Destroy()
+			}
+
+			mw2.SetFormat("gif")
+			vkPhoto, err := core.GetStorage().Vk.UploadMessagesDoc(obj.Message.PeerID, "doc", "deafmute-bot.gif", "", bytes.NewReader(mw2.GetImagesBlob()))
+
+			mw1.Destroy()
+			mw2.Destroy()
+			aw.Destroy()
+
+			if err != nil {
+				core.ReplySimple(obj, core.ERR_UNKNOWN)
+
+				return
+			}
+
+			core.ReplySimple(obj, "ваша картинка:", vkPhoto.Doc)
+
+			return
+		})
+
+		return
 	}
 
 	mw1.ResizeImage(data.Width, data.Height, imagick.FILTER_UNDEFINED, 1)

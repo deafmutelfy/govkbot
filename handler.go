@@ -4,13 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strconv"
 	"strings"
 	"vkbot/core"
+	"vkbot/subsystems/queuesystem"
 
-	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
-	"github.com/golang-queue/queue"
 )
 
 func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Command) {
@@ -50,7 +48,7 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 
 	launcher := func(x *core.Command) {
 		if x.Queue == nil {
-			go func () {
+			go func() {
 				if err := x.Handler(&obj); err != nil {
 					log.Println(err)
 				}
@@ -59,59 +57,7 @@ func handle(ctx context.Context, obj events.MessageNewObject, parentcmd *core.Co
 			return
 		}
 
-		q, ok := queuePool[x.Queue.Name]
-		if !ok {
-			q = queue.NewPool(3)
-
-			queuePoolMutex.Lock()
-			queuePool[x.Queue.Name] = q
-			queuePoolMutex.Unlock()
-		}
-
-		if core.IsInArray(queueIds, obj.Message.FromID) {
-			core.ReplySimple(&obj, "ошибка: запрос от вас уже получен")
-
-			return
-		}
-
-		queueIdsMutex.Lock()
-		queueIds = append(queueIds, obj.Message.FromID)
-		queueIdsMutex.Unlock()
-
-		b := params.NewMessagesSendBuilder()
-
-		b.DisableMentions(true)
-
-		d, _ := core.Send(&obj,
-			"[id"+
-				strconv.Itoa(obj.Message.FromID)+
-				"|"+
-				core.GetNickname(obj.Message.FromID)+
-				"], ваш запрос принят в обработку. Номер в очереди: "+
-				strconv.Itoa(q.SubmittedTasks()-q.FailureTasks()-q.SuccessTasks()-q.BusyWorkers()+1),
-			b)
-
-		queuePoolMutex.Lock()
-		q.QueueTask(func(_ context.Context) error {
-			if err := x.Handler(&obj); err != nil {
-				log.Println(err)
-			}
-
-			queueIdsMutex.Lock()
-			queueIds = core.Remove(queueIds, obj.Message.FromID)
-			queueIdsMutex.Unlock()
-
-			bu := params.NewMessagesDeleteBuilder()
-
-			bu.PeerID(obj.Message.PeerID)
-			bu.ConversationMessageIDs([]int{d[0].ConversationMessageID})
-			bu.DeleteForAll(true)
-
-			s.Vk.MessagesDelete(bu.Params)
-
-			return nil
-		})
-		queuePoolMutex.Unlock()
+		queuesystem.Add(&obj, x.Handler)
 	}
 
 	launched := false

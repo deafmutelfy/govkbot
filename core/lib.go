@@ -12,7 +12,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/object"
 )
 
-func Send(obj *events.MessageNewObject, msg string, b *params.MessagesSendBuilder) (api.MessagesSendUserIDsResponse, error){
+func Send(obj *events.MessageNewObject, msg string, b *params.MessagesSendBuilder) (api.MessagesSendUserIDsResponse, error) {
 	b.Message(msg)
 	b.RandomID(0)
 	b.PeerIDs([]int{obj.Message.PeerID})
@@ -124,8 +124,9 @@ func ExtractAttachments(obj *events.MessageNewObject, t ...string) []object.Mess
 	if len(t) > 0 {
 		found := []object.MessagesMessageAttachment{}
 
+		types := strings.Split(t[0], ",")
 		for _, x := range res {
-			if x.Type == t[0] {
+			if IsInArray(types, x.Type) {
 				found = append(found, x)
 			}
 		}

@@ -68,6 +68,8 @@ func main() {
 		handle(ctx, obj, nil)
 	})
 
+	log.Println("Bot successfully started")
+
 	if s.Cfg.EventManager == "callback" {
 		http.HandleFunc("/callback", h.(eventManagerCallback).HandleFunc)
 		http.ListenAndServe(s.Cfg.Host+":"+s.Cfg.Port, nil)
