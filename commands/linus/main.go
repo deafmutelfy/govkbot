@@ -31,7 +31,8 @@ func Register() core.Command {
 }
 
 func handle(obj *events.MessageNewObject) (err error) {
-	atts := core.ExtractAttachments(obj, "photo,doc")
+	// atts := core.ExtractAttachments(obj, "photo,doc")
+	atts := core.ExtractAttachments(obj, "photo")
 
 	if len(atts) == 0 {
 		core.ReplySimple(obj, core.ERR_NO_PICTURE)

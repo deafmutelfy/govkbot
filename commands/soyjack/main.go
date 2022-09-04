@@ -2,8 +2,10 @@ package soyjack
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"net/http"
+	"strings"
 	"vkbot/core"
 	"vkbot/subsystems/queuesystem"
 
@@ -13,13 +15,10 @@ import (
 
 const soyboy_file_path = "commands/soyjack/soyboy.png"
 const gurba_file_path = "commands/soyjack/gurba.png"
-
-const (
-	mode_soyboy = "сойбой"
-	mode_gurba  = "нс"
-)
+const arkady_file_path = "commands/soyjack/arkady.png"
 
 type mode_data struct {
+	Name string
 	Mask []float64
 
 	Wand *imagick.MagickWand
@@ -30,8 +29,32 @@ type mode_data struct {
 	PosX int
 	PosY int
 }
+type soyjack_pool []mode_data
 
-var mwsoy, mwgurba *imagick.MagickWand
+var soyjacks soyjack_pool
+var mwsoy, mwgurba, mwarkady *imagick.MagickWand
+
+func (s *soyjack_pool) Probe(name string) (w mode_data, err error) {
+	for _, v := range *s {
+		if v.Name == name {
+			w = v
+
+			return
+		}
+	}
+
+	err = errors.New("ошибка: шаблон не найден")
+	return
+}
+
+func (s *soyjack_pool) Help(obj *events.MessageNewObject) {
+	names := []string{}
+	for _, x := range *s {
+		names = append(names, x.Name)
+	}
+
+	core.ReplySimple(obj, "доступные шаблоны: "+strings.Join(names, ", "))
+}
 
 func Register() core.Command {
 	mwsoy = imagick.NewMagickWand()
@@ -39,6 +62,54 @@ func Register() core.Command {
 
 	mwgurba = imagick.NewMagickWand()
 	mwgurba.ReadImage(gurba_file_path)
+
+	mwarkady = imagick.NewMagickWand()
+	mwarkady.ReadImage(arkady_file_path)
+
+	soyjacks = soyjack_pool{
+		{
+			Name: "сойбой",
+			Mask: []float64{
+				0, 0, 1, 20,
+				1, 443, 33, 443,
+				275, 443, 273, 423,
+				275, 1, 238, 2,
+			},
+			Wand:   mwsoy,
+			Width:  275,
+			Height: 443,
+			PosX:   25,
+			PosY:   66,
+		},
+		{
+			Name: "нс",
+			Mask: []float64{
+				0, 0, 3, 1,
+				0, 414, 1, 412,
+				595, 414, 595, 362,
+				595, 0, 566, 6,
+			},
+			Wand:   mwgurba,
+			Width:  595,
+			Height: 414,
+			PosX:   8,
+			PosY:   1249,
+		},
+		{
+			Name: "ас",
+			Mask: []float64{
+				0, 0, 41, 2,
+				0, 436, 1, 356,
+				607, 436, 607, 436,
+				607, 0, 600, 93,
+			},
+			Wand:   mwarkady,
+			Width:  607,
+			Height: 436,
+			PosX:   344,
+			PosY:   1248,
+		},
+	}
 
 	return core.Command{
 		Aliases:     []string{"сой", "сойджек"},
@@ -48,7 +119,9 @@ func Register() core.Command {
 }
 
 func handle(obj *events.MessageNewObject) (err error) {
-	atts := core.ExtractAttachments(obj, "photo,doc")
+	// atts := core.ExtractAttachments(obj, "photo,doc")
+	atts := core.ExtractAttachments(obj, "photo")
+
 	if len(atts) == 0 {
 		core.ReplySimple(obj, core.ERR_NO_PICTURE)
 
@@ -90,32 +163,19 @@ func handle(obj *events.MessageNewObject) (err error) {
 	data := mode_data{}
 
 	if mw1.GetImageWidth() < mw1.GetImageHeight() {
-		data = mode_data{
-			Mask: []float64{
-				0, 0, 1, 20,
-				1, 443, 33, 443,
-				275, 443, 273, 423,
-				275, 1, 238, 2,
-			},
-			Wand:   mwsoy,
-			Width:  275,
-			Height: 443,
-			PosX:   25,
-			PosY:   66,
-		}
+		data, _ = soyjacks.Probe("сойбой")
 	} else {
-		data = mode_data{
-			Mask: []float64{
-				0, 0, 3, 1,
-				0, 414, 1, 412,
-				595, 414, 595, 362,
-				595, 0, 566, 6,
-			},
-			Wand:   mwgurba,
-			Width:  595,
-			Height: 414,
-			PosX:   8,
-			PosY:   1249,
+		data, _ = soyjacks.Probe("нс")
+	}
+
+	name := strings.Join(core.ExtractArguments(obj), " ")
+	if name != "" {
+		data, err = soyjacks.Probe(name)
+		if err != nil {
+			soyjacks.Help(obj)
+			err = nil
+
+			return
 		}
 	}
 
