@@ -16,6 +16,8 @@ import (
 const soyboy_file_path = "commands/soyjack/soyboy.png"
 const gurba_file_path = "commands/soyjack/gurba.png"
 const arkady_file_path = "commands/soyjack/arkady.png"
+const zakhar_file_path = "commands/soyjack/zakhar.png"
+const yuri_file_path = "commands/soyjack/yuri.png"
 
 type mode_data struct {
 	Name string
@@ -32,7 +34,7 @@ type mode_data struct {
 type soyjack_pool []mode_data
 
 var soyjacks soyjack_pool
-var mwsoy, mwgurba, mwarkady *imagick.MagickWand
+var mwsoy, mwgurba, mwarkady, mwzakhar, mwyuri *imagick.MagickWand
 
 func (s *soyjack_pool) Probe(name string) (w mode_data, err error) {
 	for _, v := range *s {
@@ -65,6 +67,12 @@ func Register() core.Command {
 
 	mwarkady = imagick.NewMagickWand()
 	mwarkady.ReadImage(arkady_file_path)
+
+	mwzakhar = imagick.NewMagickWand()
+	mwzakhar.ReadImage(zakhar_file_path)
+
+	mwyuri = imagick.NewMagickWand()
+	mwyuri.ReadImage(yuri_file_path)
 
 	soyjacks = soyjack_pool{
 		{
@@ -108,6 +116,34 @@ func Register() core.Command {
 			Height: 436,
 			PosX:   344,
 			PosY:   1248,
+		},
+		{
+			Name: "зс",
+			Mask: []float64{
+				0, 0, 21, 0,
+				0, 359, 1, 310,
+				584, 359, 570, 359,
+				584, 0, 583, 21,
+			},
+			Wand:   mwzakhar,
+			Width:  584,
+			Height: 359,
+			PosX:   1440,
+			PosY:   606,
+		},
+		{
+			Name: "юс",
+			Mask: []float64{
+				0, 0, 33, 2,
+				0, 372, 2, 371,
+				612, 372, 611, 363,
+				612, 0, 606, 38,
+			},
+			Wand:   mwyuri,
+			Width:  612,
+			Height: 372,
+			PosX:   430,
+			PosY:   859,
 		},
 	}
 
