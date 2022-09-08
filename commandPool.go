@@ -9,6 +9,7 @@ import (
 	"vkbot/commands/curse"
 	"vkbot/commands/dota2"
 	"vkbot/commands/help"
+	"vkbot/commands/isolator"
 	"vkbot/commands/linus"
 	"vkbot/commands/mashup"
 	"vkbot/commands/nick"
@@ -50,5 +51,6 @@ func commandPool() []core.Command {
 		mashup.Register(),
 		rptool.Register(),
 		window.Register(),
+		isolator.Register(),
 	}
 }
