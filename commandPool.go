@@ -24,6 +24,7 @@ import (
 	"vkbot/commands/tts"
 	"vkbot/commands/who"
 	"vkbot/commands/window"
+	"vkbot/commands/wrong"
 	"vkbot/core"
 )
 
@@ -52,5 +53,6 @@ func commandPool() []core.Command {
 		rptool.Register(),
 		window.Register(),
 		isolator.Register(),
+		wrong.Register(),
 	}
 }
