@@ -7,6 +7,7 @@ import (
 	"vkbot/commands/cm"
 	"vkbot/commands/commemoration"
 	"vkbot/commands/curse"
+	"vkbot/commands/demotivator"
 	"vkbot/commands/dota2"
 	"vkbot/commands/help"
 	"vkbot/commands/isolator"
@@ -54,5 +55,6 @@ func commandPool() []core.Command {
 		window.Register(),
 		isolator.Register(),
 		wrong.Register(),
+		demotivator.Register(),
 	}
 }
