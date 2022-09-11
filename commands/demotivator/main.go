@@ -75,11 +75,14 @@ func handle(obj *events.MessageNewObject) (err error) {
 	}
 
 	src := imagick.NewMagickWand()
+	defer src.Destroy()
 	src.ReadImageBlob(bt)
 	src.ScaleImage(WIDTH, uint(WIDTH/float64(src.GetImageWidth())*float64(src.GetImageHeight())))
 
 	dw := imagick.NewDrawingWand()
+	defer dw.Destroy()
 	pw := imagick.NewPixelWand()
+	defer pw.Destroy()
 
 	cRatioLine := float64(src.GetImageWidth()) * RATIO_LINE
 	withBorderWidth := cRatioLine*4 + float64(src.GetImageWidth())
@@ -93,6 +96,7 @@ func handle(obj *events.MessageNewObject) (err error) {
 	parts := imagick.NewMagickWand()
 
 	parts.NewImage(uint(withBorderWidth), uint(withBorderHeight), pw)
+	defer parts.Destroy()
 	parts.DrawImage(dw)
 
 	cRatioSide := float64(WIDTH) * RATIO_SIDE
@@ -103,7 +107,7 @@ func handle(obj *events.MessageNewObject) (err error) {
 	parts.SetPointsize(cWidth * RATIO_FONT_TITLE)
 	parts.SetGravity(imagick.GRAVITY_CENTER)
 	parts.SetBackgroundColor(pw)
-	parts.SetSize(uint(float64(WIDTH)-cRatioSide*2), 0)
+	parts.SetSize(uint(float64(WIDTH)-cRatioSide), 0)
 	parts.SetOption("fill", "white")
 	parts.SetOption("pango:wrap", "word-char")
 	parts.ReadImage("pango:" + title)
@@ -113,6 +117,7 @@ func handle(obj *events.MessageNewObject) (err error) {
 	parts.ReadImage("pango:" + body)
 
 	dst := imagick.NewMagickWand()
+	defer dst.Destroy()
 
 	height := src.GetImageHeight()
 	cRatioHSide := float64(height) * RATIO_H_SIDE
@@ -139,6 +144,7 @@ func handle(obj *events.MessageNewObject) (err error) {
 	dst.CompositeImage(parts, imagick.COMPOSITE_OP_SRC_OVER, int((cWidth-float64(wb))/2), int(cRatioHSide+withBorderHeight+cRatioBeforeText+float64(ht)+cRatioBetweenText))
 
 	dst.SetImageFormat("png")
+
 	vkPhoto, err := core.GetStorage().Vk.UploadMessagesPhoto(0, bytes.NewReader(dst.GetImageBlob()))
 
 	if err != nil {
