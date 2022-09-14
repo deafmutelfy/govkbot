@@ -2,7 +2,6 @@ package yt
 
 import (
 	"bytes"
-	"os"
 	"os/exec"
 	"strconv"
 	"vkbot/core"
