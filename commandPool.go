@@ -26,6 +26,7 @@ import (
 	"vkbot/commands/who"
 	"vkbot/commands/window"
 	"vkbot/commands/wrong"
+	"vkbot/commands/wts"
 	"vkbot/commands/yt"
 	"vkbot/core"
 )
@@ -58,5 +59,6 @@ func commandPool() []core.Command {
 		wrong.Register(),
 		demotivator.Register(),
 		yt.Register(),
+		wts.Register(),
 	}
 }
