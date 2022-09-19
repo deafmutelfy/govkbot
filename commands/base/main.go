@@ -11,7 +11,7 @@ import (
 	"github.com/valyala/fastjson"
 )
 
-const bazman_uri = "bazman.ctw.re"
+const bazman_uri = "bmapi.ctw.re"
 
 func Register() core.Command {
 	return core.Command{
@@ -106,6 +106,6 @@ func handle(obj *events.MessageNewObject) (err error) {
 	}
 
 	core.SendSimple(obj, string(b))
-	
+
 	return
 }
