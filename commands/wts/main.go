@@ -28,6 +28,11 @@ var smiles = []string{
 	"🙏🏻",
 	"💞",
 	"😭",
+	"💜",
+	"🚀",
+	"👀",
+	"💥",
+	"💔",
 }
 
 func handle(obj *events.MessageNewObject) (err error) {
