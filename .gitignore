@@ -3,3 +3,4 @@ vkbot
 config.yaml
 .idea
 vkbot.exe
+.env

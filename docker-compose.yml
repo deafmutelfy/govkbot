@@ -1,0 +1,8 @@
+services:
+  bot:
+    build: .
+    env_file: .env
+  db:
+    image: eqalpha/keydb:latest
+    ports:
+      - 6379:6379
