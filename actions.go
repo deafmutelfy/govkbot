@@ -7,6 +7,7 @@ import (
 	"vkbot/commands/cm"
 	"vkbot/core"
 
+	"github.com/SevereCloud/vksdk/v2/api/params"
 	"github.com/SevereCloud/vksdk/v2/events"
 	"github.com/dlclark/regexp2"
 )
@@ -15,6 +16,27 @@ func handleChatInviteUser(obj *events.MessageNewObject) {
 	s := core.GetStorage()
 
 	if obj.Message.Action.MemberID == -s.Cfg.GroupId {
+		return
+	}
+
+	ok, _ := s.Db.Get(s.Ctx, fmt.Sprintf("bans.%d.%d", obj.Message.PeerID, obj.Message.Action.MemberID)).Result()
+	if ok == "true" && obj.Message.Action.MemberID > 0 {
+		b := params.NewMessagesRemoveChatUserBuilder()
+
+		b.MemberID(obj.Message.Action.MemberID)
+		b.ChatID(core.PeerIdToChatId(obj))
+
+		s := core.GetStorage()
+
+		_, err := s.Vk.MessagesRemoveChatUser(b.Params)
+		if err != nil {
+			core.SendSimple(obj, "Возникла ошибка при исключении [id"+strconv.Itoa(obj.Message.Action.MemberID)+"|заблокированного пользователя] из беседы. Для уточнения причины воспользуйтесь командой \"/чм кик\"")
+
+			return
+		}
+
+		core.SendSimple(obj, "[id"+strconv.Itoa(obj.Message.Action.MemberID)+"|Заблокированный пользователь] исключён")
+
 		return
 	}
 

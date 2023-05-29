@@ -20,6 +20,16 @@ func Register() core.Command {
 				Handler:     kick,
 			},
 			{
+				Aliases:     []string{"бан"},
+				Description: "забанить участника беседы",
+				Handler:     ban,
+			},
+			{
+				Aliases:     []string{"разбан"},
+				Description: "разбанить пользователя в беседе",
+				Handler:     unban,
+			},
+			{
 				Aliases:     []string{"инит"},
 				Description: "инициализировать систему ролей в беседе",
 				Handler:     initrole,
@@ -51,7 +61,7 @@ func Register() core.Command {
 			{
 				Aliases:     []string{"снять"},
 				Description: "отозвать роль пользователя",
-				Handler: func(obj *events.MessageNewObject) (err error){
+				Handler: func(obj *events.MessageNewObject) (err error) {
 					return setrole(obj, rolesystem.ROLE_MEMBER)
 				},
 			},
