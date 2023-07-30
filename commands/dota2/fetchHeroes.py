@@ -8,7 +8,7 @@ with urllib.request.urlopen("https://raw.githubusercontent.com/odota/dotaconstan
 
     txt = "package dota2\n\nvar heroes = []string{\n"
 
-    for x in range(1, 138):
+    for x in range(1, 139):
         if data.get(str(x), None):
             name = data[str(x)]["localized_name"]
         else:
