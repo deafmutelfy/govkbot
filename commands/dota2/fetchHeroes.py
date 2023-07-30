@@ -4,7 +4,7 @@ import urllib.request, json
 with urllib.request.urlopen("https://raw.githubusercontent.com/odota/dotaconstants/master/build/heroes.json") as url:
     data = json.loads(url.read().decode())
     
-    f = open("heroes.go", "a")
+    f = open("heroes.go", "w")
 
     txt = "package dota2\n\nvar heroes = []string{\n"
 
