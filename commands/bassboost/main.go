@@ -56,7 +56,7 @@ func handle(obj *events.MessageNewObject) (err error) {
 
 	attachment := atts[0]
 
-	if attachment.Audio.Duration > 10*60 {
+	if attachment.Audio.Duration > 15*60 {
 		core.ReplySimple(obj, core.ERR_10MIN)
 
 		return
